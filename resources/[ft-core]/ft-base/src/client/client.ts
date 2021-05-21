@@ -1,16 +1,56 @@
-// Turn off emergency/police/ems dispatch every frame
+const debug = true;
+
+
 setTick(() => {
+  // Turn off emergency/police/ems dispatch every frame
   for (let i = 0; i < 25; i++) {
     EnableDispatchService(i, false)
   }
-})
 
-// Turn off wanted level
-setTick(() => {
-  ClearPlayerWantedLevel(PlayerPedId())
+  // Turn off wanted level
+    ClearPlayerWantedLevel(PlayerId())
 })
 
 RegisterCommand("tpm", () => {
-  console.log("teleporting to marker")
-  emitNet("ft-core:tpm")
+  TeleportToMarker();
+  emitNet("ft-core:tpm");
 }, false)
+
+function TeleportToMarker (): void {
+  const marker = GetFirstBlipInfoId(8);
+  if (DoesBlipExist(marker)) {
+    const markerCoords = GetBlipInfoIdCoord(marker);
+    debugLog("Teleporting to marker.");
+    TeleportToCoords(markerCoords[0], markerCoords[1]);
+  } else {
+    debugLog("No marker found.");
+  }
+}
+
+function TeleportToCoords(x: number, y: number): void {
+  SetPedCoordsKeepVehicle(PlayerPedId(), x, y, 0);
+  setTimeout(() => {TeleportFindZ(x, y); }, 1);
+}
+
+function TeleportFindZ(x: number, y: number) {
+  for (let height = 10000; height > 0; height--) {
+    
+    const groundCoords = GetGroundZFor_3dCoord(x, y, height, false);
+
+    if (groundCoords[0]) {
+      debugLog(height.toString());
+      SetPedCoordsKeepVehicle(PlayerPedId(), x, y, groundCoords[1]);
+      return;
+    }
+    
+  }   
+  debugLog("Couldn't find ground, trying again");
+  setTimeout(() => {TeleportFindZ(x, y); }, 100);
+}
+
+function debugLog(message: string)
+{
+  if (debug) {
+    console.log(message)
+  }
+}
