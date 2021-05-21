@@ -9,7 +9,7 @@ url 'https://github.com/d0p3t/fivem-ts-boilerplate'
 client_script 'dist/client/*.client.js'
 server_script 'dist/server/*.server.js'
 
-dependency 'yarn'
-dependency 'webpack'
+-- dependency 'yarn'
+-- dependency 'webpack'
 
-webpack_config 'webpack.config.js'
+-- webpack_config 'webpack.config.js'

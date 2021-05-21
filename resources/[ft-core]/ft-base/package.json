@@ -1,10 +1,9 @@
 {
-  "name": "fivem-ts-boilerplate",
+  "name": "funtown-base",
   "version": "2.1.1",
   "description": "Typescript Boilerplate for FiveM",
-  "main": "index.js",
-  "repository": "https://github.com/d0p3t/fivem-ts-boilerplate",
-  "author": "d0p3t <d0p3t@users.noreply.github.com>",
+  "main": "client.ts",
+  "author": "adoggman <adoggman@users.noreply.github.com>",
   "scripts": {
     "build": "webpack --mode production",
     "format": "prettier --write \"src/**/*.ts\"",

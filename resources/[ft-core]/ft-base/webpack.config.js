@@ -3,9 +3,11 @@ const path = require('path');
 const RemovePlugin = require('remove-files-webpack-plugin');
 
 const buildPath = path.resolve(__dirname, 'dist');
+const contextPath = path.resolve(__dirname, 'src');
 
 const server = {
-  entry: './resources/[local]/fivem-ts-boilerplate/src/server/server.ts',
+  context: contextPath,
+  entry: './server/server.ts',
   module: {
     rules: [
       {
@@ -40,7 +42,8 @@ const server = {
 };
 
 const client = {
-  entry: './resources/[local]/fivem-ts-boilerplate/src/client/client.ts',
+  context: contextPath,
+  entry: './client/client.ts',
   module: {
     rules: [
       {
