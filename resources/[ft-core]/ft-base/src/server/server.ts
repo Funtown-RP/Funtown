@@ -1,4 +1,6 @@
-import * as players from "./lib/player";
+import { GetPlayerIdentifiers } from "./lib/identifiers";
+import * as players from "./classes/player";
+import * as characters from "./classes/character";
 import * as sql from "./lib/sql"
 
 onNet('ft-core:tpm', () => {
@@ -10,7 +12,7 @@ onNet('playerConnecting', () => {
 })
 
 function insertOrUpdatePlayer (src: string) {
-  const identifiers = players.GetPlayerIdentifiers(src);
+  const identifiers = GetPlayerIdentifiers(src);
   sql.execute("INSERT INTO `players` (`steam`,`discord`) VALUES (?, ?) ON DUPLICATE KEY UPDATE `steam` = ?", [identifiers.steam, identifiers.discord, identifiers.steam],
     () => {
       players.PlayerChanged(identifiers.discord);
@@ -18,13 +20,18 @@ function insertOrUpdatePlayer (src: string) {
 }
 
 RegisterCommand('sql', (src: string) => {
-  const identifiers = players.GetPlayerIdentifiers(src);
+  const identifiers = GetPlayerIdentifiers(src);
   sql.execute("INSERT INTO `players` (`steam`,`discord`) VALUES (?, ?) ON DUPLICATE KEY UPDATE `steam` = ?", [identifiers.steam, identifiers.discord, identifiers.steam],
     () => {
       players.PlayerChanged(identifiers.discord);
     });
 }, false);
 
-RegisterCommand('sql2', async (src: string) => {
-  console.log(JSON.stringify(await players.GetPlayerSrc(src)))
+RegisterCommand('chars', (src) => {
+  const discord = GetPlayerIdentifiers(src).discord;
+  characters.GetCharacters(discord).then((chars) => { setImmediate(() => console.log(JSON.stringify(chars)));})
+}, false);
+
+RegisterCommand('char', (_src, args) => {
+  characters.GetCharacter(args[0]).then((char) => { setImmediate(() => console.log(JSON.stringify(char)));})
 }, false);
