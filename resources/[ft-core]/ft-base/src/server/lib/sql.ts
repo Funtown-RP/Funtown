@@ -1,10 +1,12 @@
+const timeout = 500;
+
 export function execute (query: string, parameters?: any | Array<any>, callback?: (result: any) => void): void {
 	global.exports.ghmattimysql.execute(query, parameters, callback);
 }
 
 export async function executeSync (query: string, parameters?: any | Array<any>): Promise<any> {
 	return Promise.race([
-		new Promise((_resolve, reject) => { const wait = setTimeout(() => { clearTimeout(wait); reject("timeout"); }, 500) }),
+		new Promise((_resolve, reject) => { const wait = setTimeout(() => { clearTimeout(wait); reject("timeout"); }, timeout) }),
 		new Promise((resolve) => {
 			global.exports.ghmattimysql.execute(query, parameters, (result) => { resolve(result); });
 		})
@@ -15,8 +17,13 @@ export function scalar (query: string, parameters?: any | Array<any>, callback?:
 	global.exports.ghmattimysql.scalar(query, parameters, callback);
 }
 
-export function scalarSync (query: string, parameters?: any | Array<any>): any {
-	return global.exports.ghmattimysql.scalarSync(query, parameters);
+export async function scalarSync (query: string, parameters?: any | Array<any>): Promise<any> {
+	return Promise.race([
+		new Promise((_resolve, reject) => { const wait = setTimeout(() => { clearTimeout(wait); reject("timeout"); }, timeout) }),
+		new Promise((resolve) => {
+			global.exports.ghmattimysql.scalar(query, parameters, (result) => { resolve(result) });
+		})
+	]);
 }
 
 export interface ICache<T> {
