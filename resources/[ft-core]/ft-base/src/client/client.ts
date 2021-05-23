@@ -54,3 +54,22 @@ function debugLog(message: string)
     console.log(message)
   }
 }
+
+RegisterCommand("test", (_source: string, _args: Array<any>) => {
+  SendNuiMessage(JSON.stringify({ type: 'open', app: 'charSelect'}))
+  SetNuiFocus(true, true);
+}, false);
+
+RegisterNuiCallbackType('close')
+on('__cfx_nui:close', (_data, callback) => {
+    SetNuiFocus(false, false);
+    callback({});
+});
+
+RegisterCommand("nui", () => {
+  SetNuiFocus(true, true);
+}, false)
+
+RegisterCommand("nuiq", () => {
+  SetNuiFocus(false, false);
+}, false)
