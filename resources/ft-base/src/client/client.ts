@@ -55,8 +55,8 @@ function debugLog(message: string)
   }
 }
 
-RegisterCommand("test", (_source: string, _args: Array<any>) => {
-  SendNuiMessage(JSON.stringify({ type: 'open', app: 'charSelect'}))
+RegisterCommand("debug", (_source: string, _args: Array<any>) => {
+  SendNuiMessage(JSON.stringify({ type: 'open', app: 'main'}))
   SetNuiFocus(true, true);
 }, false);
 
@@ -65,10 +65,6 @@ on('__cfx_nui:close', (_data, callback) => {
     SetNuiFocus(false, false);
     callback({});
 });
-
-RegisterCommand("nui", () => {
-  SetNuiFocus(true, true);
-}, false)
 
 RegisterCommand("nuiq", () => {
   SetNuiFocus(false, false);
