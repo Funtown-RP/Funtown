@@ -2,4 +2,3 @@ cache
 *.lnk
 *.bat
 **/node_modules
-.vscode
