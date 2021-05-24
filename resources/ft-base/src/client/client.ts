@@ -66,6 +66,23 @@ on('__cfx_nui:close', (_data, callback) => {
     callback({});
 });
 
+RegisterNuiCallbackType('getCharacters')
+on('__cfx_nui:getCharacters', (_data, callback) => {
+    emitNet('ft-base:loadCharacters')
+    callback({});
+});
+
+RegisterNuiCallbackType('selectChar')
+on('__cfx_nui:selectChar', (data, callback) => {
+    console.log(JSON.stringify(data))
+    emitNet('ft-base:selectChar', data.charID)
+    callback({});
+});
+
+onNet('ft-base:loadedCharacters', (characters) => {
+  SendNuiMessage(JSON.stringify({ app: 'charSelect', type: 'characters', characters: characters}));
+});
+
 RegisterCommand("nuiq", () => {
   SetNuiFocus(false, false);
 }, false)

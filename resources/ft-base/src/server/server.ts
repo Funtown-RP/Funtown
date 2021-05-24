@@ -19,19 +19,18 @@ function insertOrUpdatePlayer (src: string) {
     });
 }
 
+onNet('ft-base:loadCharacters', () => {
+  const src = source;
+  characters.GetCharacters(GetPlayerIdentifiers(src).discord).then((chars) => {
+    emitNet('ft-base:loadedCharacters', src, chars)
+  });
+  
+})
+
 RegisterCommand('sql', (src: string) => {
   const identifiers = GetPlayerIdentifiers(src);
   sql.execute("INSERT INTO `players` (`steam`,`discord`) VALUES (?, ?) ON DUPLICATE KEY UPDATE `steam` = ?", [identifiers.steam, identifiers.discord, identifiers.steam],
     () => {
       players.PlayerChanged(identifiers.discord);
     });
-}, false);
-
-RegisterCommand('chars', (src) => {
-  const discord = GetPlayerIdentifiers(src).discord;
-  characters.GetCharacters(discord).then((chars) => { setImmediate(() => console.log(JSON.stringify(chars)));})
-}, false);
-
-RegisterCommand('char', (_src, args) => {
-  characters.GetCharacter(args[0]).then((char) => { setImmediate(() => console.log(JSON.stringify(char)));})
 }, false);

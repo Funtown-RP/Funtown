@@ -7,7 +7,7 @@ export function execute (query: string, parameters?: any | Array<any>, callback?
 export async function executeSync (query: string, parameters?: any | Array<any>): Promise<any> {
 	return PromiseTimeout(
 		new Promise((resolve) => {
-			global.exports.ghmattimysql.execute(query, parameters, (result) => { resolve(result); });
+			global.exports.ghmattimysql.execute(query, parameters, (result: any) => { resolve(result); });
 		}),
 		timeout);
 }
@@ -19,7 +19,7 @@ export function scalar (query: string, parameters?: any | Array<any>, callback?:
 export async function scalarSync (query: string, parameters?: any | Array<any>): Promise<any> {
 	return PromiseTimeout(
 		new Promise((resolve) => {
-			global.exports.ghmattimysql.scalar(query, parameters, (result) => { resolve(result) });
+			global.exports.ghmattimysql.scalar(query, parameters, (result: any) => { resolve(result) });
 		}),
 		timeout);
 }
@@ -39,7 +39,7 @@ export interface IMultipleCache<T> {
 	[key: string]: T[];
 }
 
-function isEmpty (obj) {
+function isEmpty (obj: any) {
 	return Object.keys(obj).length === 0;
 }
 
@@ -86,7 +86,7 @@ export class Cache<T> {
 	}
 
 	changed (key: string): void {
-		this.cache[key] = null;
+		delete this.cache[key];
 	}
 }
 
@@ -110,6 +110,6 @@ export class ArrayCache<T> {
 	}
 
 	changed (key: string): void {
-		this.cache[key] = null;
+		delete this.cache[key];
 	}
 }

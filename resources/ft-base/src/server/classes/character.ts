@@ -18,7 +18,11 @@ export async function GetCharacter(characterID: string): Promise<character> {
 	return await charactersId.get(characterID);
 }
 
-export function CharacterChanged(discord: string): void {
-	charactersId.changed(charactersDiscord[discord].id)
+export async function CharacterChanged(discord: string): Promise<void> {
+	const characters = await charactersDiscord.get(discord)
+	for (const character of characters) {
+		charactersId.changed(character.id.toString());
+	}
+	
 	charactersDiscord.changed(discord);
 }
