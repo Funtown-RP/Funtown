@@ -73,13 +73,13 @@ on('__cfx_nui:getCharacters', (_data, callback) => {
 });
 
 RegisterNuiCallbackType('selectChar')
-on('__cfx_nui:selectChar', (data, callback) => {
+on('__cfx_nui:selectChar', (data: any, callback: (...args) => void) => {
     console.log(JSON.stringify(data))
     emitNet('ft-base:selectChar', data.charID)
     callback({});
 });
 
-onNet('ft-base:loadedCharacters', (characters) => {
+onNet('ft-base:loadedCharacters', (characters: any) => {
   SendNuiMessage(JSON.stringify({ app: 'charSelect', type: 'characters', characters: characters}));
 });
 
