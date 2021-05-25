@@ -1,11 +1,5 @@
-import { Cache, ArrayCache } from "../lib/sql"
-
-export interface character {
-	id: number;
-	player_discord: string;
-	first_name: string;
-	last_name: string;
-}
+import { Cache, ArrayCache, execute } from "../lib/sql"
+import { character } from "../../shared/interfaces"
 
 const charactersId = new Cache<character>("characters", "id");
 const charactersDiscord = new ArrayCache<character>("characters", "player_discord");
@@ -25,4 +19,14 @@ export async function CharacterChanged(discord: string): Promise<void> {
 	}
 	
 	charactersDiscord.changed(discord);
+}
+
+export async function NewCharacter(src: string, discord: string, firstName: string, lastName: string): Promise<void> {
+	charactersDiscord.changed(discord);
+	execute("INSERT INTO characters (player_discord, first_name, last_name) VALUES (?, ?, ?)", [discord, firstName, lastName], 
+		async (result) => {
+			charactersDiscord.changed(discord);
+			const newChar = await GetCharacter(result.insertId);
+			emitNet('ft-base:selectNewChar', src, newChar);
+		});
 }

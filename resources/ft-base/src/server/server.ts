@@ -34,3 +34,14 @@ RegisterCommand('sql', (src: string) => {
       players.PlayerChanged(identifiers.discord);
     });
 }, false);
+
+onNet('ft-base:newChar', (data: any) => {
+  const src = source;
+  const firstName = data.firstName || "First";
+  const lastName = data.lastName || "Last";
+  characters.NewCharacter(src, GetPlayerIdentifiers(src).discord, firstName, lastName);
+});
+
+RegisterCommand("newchar", (src: string, args: string[]) => {
+  characters.NewCharacter(src, GetPlayerIdentifiers(src).discord, args[0], args[1]);
+}, false)

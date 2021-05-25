@@ -1,5 +1,7 @@
 const debug = true;
+import { character } from "../shared/interfaces"
 
+let currentChar: character = undefined;
 
 setTick(() => {
   // Turn off emergency/police/ems dispatch every frame
@@ -55,6 +57,13 @@ function debugLog(message: string)
   }
 }
 
+on('playerSpawned', () => {
+  if (!currentChar) {
+    SendNuiMessage(JSON.stringify({ type: 'open', app: 'charSelect', forceChoice: true}))
+    SetNuiFocus(true, true);
+  }
+});
+
 RegisterCommand("debug", (_source: string, _args: Array<any>) => {
   SendNuiMessage(JSON.stringify({ type: 'open', app: 'main'}))
   SetNuiFocus(true, true);
@@ -64,7 +73,7 @@ RegisterNuiCallbackType('close')
 on('__cfx_nui:close', (_data, callback) => {
     SetNuiFocus(false, false);
     callback({});
-});
+}); 
 
 RegisterNuiCallbackType('getCharacters')
 on('__cfx_nui:getCharacters', (_data, callback) => {
@@ -72,16 +81,30 @@ on('__cfx_nui:getCharacters', (_data, callback) => {
     callback({});
 });
 
+onNet("ft-base:selectNewChar", (char: character) => {
+  currentChar = char;
+  emitNet('cui_character:requestCharData', currentChar, true)
+  emit('cui_character:open', ['identity', 'features', 'style', 'apparel' ])
+});
+
 RegisterNuiCallbackType('selectChar')
 on('__cfx_nui:selectChar', (data: any, callback: (...args) => void) => {
-    console.log(JSON.stringify(data))
-    emitNet('ft-base:selectChar', data.charID)
+    currentChar = data as character;
+    emitNet('cui_character:requestCharData', currentChar, false)
+    callback({});
+});
+
+RegisterNuiCallbackType('newChar')
+on('__cfx_nui:newChar', (data: any, callback: (...args) => void) => {
+    emitNet('ft-base:newChar', data)
     callback({});
 });
 
 onNet('ft-base:loadedCharacters', (characters: any) => {
   SendNuiMessage(JSON.stringify({ app: 'charSelect', type: 'characters', characters: characters}));
 });
+
+global.exports('currentChar', () => {return currentChar});
 
 RegisterCommand("nuiq", () => {
   SetNuiFocus(false, false);

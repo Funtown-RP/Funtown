@@ -1,51 +1,43 @@
-local function getPlayerLicense(source)
-    for k,v in ipairs(GetPlayerIdentifiers(source)) do
-        if string.match(v, 'license:') then
-            return string.sub(v, 9)
-        end
-    end
-    return false
-end
-
 -- Create the database table if it does not exist
-MySQL.ready(function()
-    MySQL.Async.execute('CREATE TABLE IF NOT EXISTS `player_skins` (`id` int(11) NOT NULL auto_increment, `identifier` varchar(128) NOT NULL, `skin` LONGTEXT NULL DEFAULT NULL, PRIMARY KEY  (`id`), UNIQUE(`identifier`))',{}, 
-    function() end)
-end)
+-- MySQL.ready(function()
+--     MySQL.Async.execute('CREATE TABLE IF NOT EXISTS `player_skins` (`id` int(11) NOT NULL auto_increment, `identifier` varchar(128) NOT NULL, `skin` LONGTEXT NULL DEFAULT NULL, PRIMARY KEY  (`id`), UNIQUE(`identifier`))',{}, 
+--     function() end)
+-- end)
 
 RegisterServerEvent('cui_character:save')
-AddEventHandler('cui_character:save', function(data)
+AddEventHandler('cui_character:save', function(char, data)
     local _source = source
-    local license = getPlayerLicense(_source)
 
-    if license then
+    if char then
         MySQL.ready(function()
-            MySQL.Async.execute('INSERT INTO `player_skins` (`identifier`, `skin`) VALUES (@identifier, @skin) ON DUPLICATE KEY UPDATE `skin` = @skin', {
+            MySQL.Async.execute('INSERT INTO `player_skins` (`char_id`, `skin`) VALUES (@charID, @skin) ON DUPLICATE KEY UPDATE `skin` = @skin', {
                 ['@skin'] = json.encode(data),
-                ['@identifier'] = license
+                ['@charID'] = char.id
             })
         end)
     end
 end)
 
-RegisterServerEvent('cui_character:requestPlayerData')
-AddEventHandler('cui_character:requestPlayerData', function()
-    local _source = source
-    local license = getPlayerLicense(_source)
+RegisterServerEvent('cui_character:requestCharData')
+AddEventHandler('cui_character:requestCharData', function(char, newPlayer)
+    local src = source
 
-    if license then
+    if not newPlayer then
         MySQL.ready(function()
-            MySQL.Async.fetchAll('SELECT skin FROM player_skins WHERE identifier = @identifier', {
-                ['@identifier'] = license
+            MySQL.Async.fetchAll('SELECT skin FROM player_skins WHERE char_id = @charID', {
+                ['@charID'] = char.id
             }, function(users)
                 local playerData = { skin = nil, newPlayer = true}
                 if users and users[1] ~= nil and users[1].skin ~= nil then
                     playerData.skin = json.decode(users[1].skin)
                     playerData.newPlayer = false
                 end
-                TriggerClientEvent('cui_character:recievePlayerData', _source, playerData)
+                TriggerClientEvent('cui_character:recievePlayerData', src, playerData)
             end)
         end)
+    else
+        local playerData = { skin = nil, newPlayer = true}
+        TriggerClientEvent('cui_character:recievePlayerData', src, playerData)
     end
 end)
 

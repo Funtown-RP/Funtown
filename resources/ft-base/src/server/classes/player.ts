@@ -1,13 +1,6 @@
 import { Cache } from "../lib/sql"
 import { GetPlayerIdentifiers } from "../lib/identifiers";
-
-export interface player {
-	id: number;
-	steam: string;
-	discord: string;
-	is_admin: boolean;
-	is_dev: boolean;
-}
+import { player } from "../../shared/interfaces"
 
 const players = new Cache<player>("players", "discord");
 

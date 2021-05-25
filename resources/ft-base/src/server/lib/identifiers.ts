@@ -3,7 +3,7 @@ export interface identifiers {
 	discord: string;
 }
 
-export function GetPlayerIdentifiers (src: string): identifiers {
+export function GetPlayerIdentifiers(src: string): identifiers {
 	let discord = "";
 	let steam = "";
 

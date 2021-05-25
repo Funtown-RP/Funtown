@@ -341,7 +341,7 @@ AddEventHandler('cui_character:close', function(save)
         for k, v in pairs(oldChar) do
             oldChar[k] = currentChar[k]
         end
-        TriggerServerEvent('cui_character:save', currentChar)
+        TriggerServerEvent('cui_character:save', exports['ft-base'].currentChar(), currentChar)
     else
         LoadCharacter(oldChar)
     end
@@ -509,83 +509,28 @@ end)
 AddEventHandler('cui_character:updateClothes', function(data, save, updateOld, callback)
     UpdateClothes(data, updateOld)
     if save then
-        TriggerServerEvent('cui_character:save', currentChar)
+        TriggerServerEvent('cui_character:save', exports['ft-base'].currentChar(), currentChar)
     end
     if callback then
         callback()
     end
 end)
 
-if not Config.StandAlone then
-    RegisterNetEvent('esx:playerLoaded')
-    AddEventHandler('esx:playerLoaded', function(xPlayer)
-        playerLoaded = true
-    end)
-
-    AddEventHandler('esx:onPlayerSpawn', function()
-        Citizen.CreateThread(function()
-            while not playerLoaded do
-                Citizen.Wait(100)
-            end
-
-            if firstSpawn then
-                oldLoadout = GetLoadout()
-                ESX.TriggerServerCallback('esx_skin:getPlayerSkin', function(skin)
-                    if skin ~= nil then
-                        oldChar = skin
-                        LoadCharacter(skin)
-                    else
-                        oldChar = GetDefaultCharacter(true)
-                        LoadCharacter(oldChar)
-                        isPlayerNew = true
-                    end
-                    preparingSkin = false
-                end)
-
-                if Config.EnableESXIdentityIntegration then
-                    local preparingIndentity = true
-                    ESX.TriggerServerCallback('cui_character:getIdentity', function(identity)
-                        if identity ~= nil then
-                            LoadIdentity(identity)
-                        end
-                        preparingIndentity = false
-                    end)
-                    while preparingIdentity do
-                        Citizen.Wait(100)
-                    end
-                end
-            end
-        end)
-    end)
-
--- StandAlone Deployment
-else
-    AddEventHandler('onClientResourceStart', function(resource)
-        if resource == GetCurrentResourceName() then
-            Citizen.CreateThread(function()
-                Citizen.Wait(250)
-                TriggerServerEvent('cui_character:requestPlayerData')
-                print("Requested player data")
-            end)
-        end
-    end)
-
-    RegisterNetEvent('cui_character:recievePlayerData')
-    AddEventHandler('cui_character:recievePlayerData', function(playerData)
-        isPlayerNew = playerData.newPlayer
-        if not isPlayerNew then
-            oldChar = playerData.skin
-            LoadCharacter(playerData.skin)
-        else
-            oldChar = GetDefaultCharacter(true)
-            LoadCharacter(oldChar)
-        end
-        preparingSkin = false
-        playerLoaded = true
-        ShutdownLoadingScreen()
-        ShutdownLoadingScreenNui()
-    end)
-end
+RegisterNetEvent('cui_character:recievePlayerData')
+AddEventHandler('cui_character:recievePlayerData', function(playerData)
+    isPlayerNew = playerData.newPlayer
+    if not isPlayerNew then
+        oldChar = playerData.skin
+        LoadCharacter(playerData.skin)
+    else
+        oldChar = GetDefaultCharacter(true)
+        LoadCharacter(oldChar)
+    end
+    preparingSkin = false
+    playerLoaded = true
+    ShutdownLoadingScreen()
+    ShutdownLoadingScreenNui()
+end)
 
 Citizen.CreateThread(function()
     while preparingSkin do
