@@ -13,20 +13,35 @@ export async function GetCharacters(discord: string): Promise<character[]> {
 	return await charactersDiscord.get(discord);
 }
 
-export async function GetCharacter(characterID: string): Promise<character> {
-	return await charactersId.get(characterID);
+export async function GetCharacter(characterID: string | number): Promise<character> {
+	return await charactersId.get(characterID.toString());
 }
 
 export function GetCurrentCharacter(src: string): character {
 	return currentCharacters[src];
 }
 
+export function GetCharacterSrc(char: character): string {
+	for (const src in currentCharacters) {
+		if (currentCharacters[src].id === char.id) {
+			return src;
+		}
+	}
+	return "";
+}
+
 export async function CharacterChanged(discord: string): Promise<void> {
 	const characters = await charactersDiscord.get(discord)
 	for (const character of characters) {
 		charactersId.changed(character.id.toString());
+
+		const src = GetCharacterSrc(character)
+		if (src !== "" && GetCurrentCharacter(src).id === character.id) {
+			GetCharacter(character.id).then((updatedChar: character) => {
+				emitNet("ft-base:characterUpdated", src, updatedChar)
+			})
+		}
 	}
-	
 	charactersDiscord.changed(discord);
 }
 

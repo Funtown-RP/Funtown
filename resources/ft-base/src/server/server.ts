@@ -61,6 +61,13 @@ RegisterCommand("addcash", (src: string, args: string[]) => {
         characters.AddCash(char, amount);
       }
   })
-}
+}}, false)
 
-}, false)
+RegisterCommand("saddcash", async (src: string, args: string[]) => {
+  if (args.length >= 2) {
+    const amount = parseInt(args[1])
+    if (amount > 0) {
+     characters.AddCash(await characters.GetCharacter(args[0]), amount);
+    }
+  }
+}, false);

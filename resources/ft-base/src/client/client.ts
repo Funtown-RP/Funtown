@@ -68,10 +68,26 @@ function UpdateGamertag() {
   setTimeout(() => { SetMpGamerTagVisibility(gamertag, 0 , false)}, 2500);
 }
 
+onNet('ft-base:characterUpdated', (char: character) => {
+  if (currentChar.id === char.id) {
+    currentChar = char;
+    console.log(`char updated: ${JSON.stringify(currentChar)}`);
+  }
+})
+
 on('playerSpawned', () => {
   if (!currentChar) {
     SendNuiMessage(JSON.stringify({ type: 'open', app: 'charSelect', forceChoice: true}))
     SetNuiFocus(true, true);
+  }
+});
+
+on('onClientResourceStart', (resourceName: string) => {
+  if (resourceName === GetCurrentResourceName()) {
+    setTimeout(() => {
+      SendNuiMessage(JSON.stringify({ type: 'open', app: 'charSelect', forceChoice: true}))
+      SetNuiFocus(true, true);
+    }, 1000);
   }
 });
 
@@ -97,18 +113,22 @@ on('__cfx_nui:getCharacters', (_data, callback) => {
     callback({});
 });
 
-onNet("ft-base:selectNewChar", (char: character) => {
+function SelectChar(char: character, isNew: boolean) {
   currentChar = char;
-  emitNet('cui_character:requestCharData', currentChar, true)
-  emit('cui_character:open', ['identity', 'features', 'style', 'apparel' ])
-  emitNet("ft-base:charSelected", currentChar)
+  emitNet('cui_character:requestCharData', currentChar, isNew);
+  emitNet("ft-base:charSelected", currentChar);
+  if (isNew) {
+    emit('cui_character:open', ['identity', 'features', 'style', 'apparel' ])
+  }
+}
+
+onNet("ft-base:selectNewChar", (char: character) => {
+  SelectChar(char, true);
 });
 
 RegisterNuiCallbackType('selectChar')
 on('__cfx_nui:selectChar', (data: any, callback: (...args) => void) => {
-    currentChar = data as character;
-    emitNet('cui_character:requestCharData', currentChar, false)
-    emitNet("ft-base:charSelected", currentChar)
+    SelectChar(data as character, false);
     callback({});
 });
 
