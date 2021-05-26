@@ -22,8 +22,12 @@ CREATE TABLE IF NOT EXISTS `characters` (
   `player_discord` varchar(255) NOT NULL,
   `first_name` varchar(255) NOT NULL,
   `last_name` varchar(255) NOT NULL,
+  `dob` date DEFAULT NULL,
+  `address` varchar(255) NOT NULL DEFAULT '',
+  `cash` int(11) NOT NULL DEFAULT 0,
+  `bank` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=latin1;
 
 -- Data exporting was unselected.
 
@@ -36,18 +40,19 @@ CREATE TABLE IF NOT EXISTS `players` (
   `is_dev` bit(1) NOT NULL DEFAULT b'0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `discord` (`discord`)
-) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=latin1;
 
 -- Data exporting was unselected.
 
 -- Dumping structure for table funtown.player_skins
 CREATE TABLE IF NOT EXISTS `player_skins` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `identifier` varchar(128) NOT NULL,
+  `char_id` int(11) NOT NULL DEFAULT -1,
   `skin` longtext DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `identifier` (`identifier`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+  UNIQUE KEY `identifier` (`char_id`) USING BTREE,
+  CONSTRAINT `Character` FOREIGN KEY (`char_id`) REFERENCES `characters` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
 
 -- Data exporting was unselected.
 
