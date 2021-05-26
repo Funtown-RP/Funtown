@@ -5,6 +5,7 @@ import { Button, Grid } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import PersonIcon from '@material-ui/icons/Person';
 import { CharSelect } from './apps/charSelect';
+import { isChrome } from 'react-device-detect'
 
 enum State {
 	closed,
@@ -21,7 +22,8 @@ class Main extends React.Component<any, MainState> {
 
 	constructor(props: any) {
 		super(props);
-		this.setState({ state: State.closed });
+		this.state = { state: State.closed };
+
 		window.addEventListener('message', (event) => {
 			if (event.data.type === "open") {
 				if (event.data.app === "main") {
@@ -68,6 +70,9 @@ class Main extends React.Component<any, MainState> {
 			return this.Menu();
 	  	} else {
 		  	// Closed
+			  if (isChrome) {
+				  return this.Menu();
+			  }
 		  	return <div></div>;
 	  	}
   	}
