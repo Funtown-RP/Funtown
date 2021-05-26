@@ -27,9 +27,10 @@ onNet('ft-base:loadCharacters', () => {
   });
 });
 
-onNet('ft-base:charSelected', (src: string, char: character) => {
+onNet('ft-base:charSelected', (char: character) => {
+  const src = source;
   characters.CharSelected(src, char);
-  console.log(`Client ${src} (${char.player_discord}) is now ${char.first_name} ${char.last_name} [${char.id}]`)
+  console.log(`Client ${src} [${char.player_discord}] is now [${char.id}] ${char.first_name} ${char.last_name}.`)
 });
 
 RegisterCommand('sql', (src: string) => {
@@ -56,7 +57,8 @@ RegisterCommand("addcash", (src: string, args: string[]) => {
   if (amount > 0) {
     players.GetPlayerSrc(src).then((player) => {
       if (player.is_admin || player.is_dev) {
-          characters.AddCash(characters.GetCurrentCharacter(src), amount);
+        const char = characters.GetCurrentCharacter(src);
+        characters.AddCash(char, amount);
       }
   })
 }
