@@ -17,6 +17,8 @@
 		"@citizenfx/server": "^1.0.2792-1",
 		"@types/node": "^14.17.1",
 		"fivem-js": "^1.5.2",
+		"glob": "^7.1.7",
+		"webpack-glob-entries-plugin": "^1.0.0",
 		"yarn": "^1.22.10"
 	},
 	"devDependencies": {

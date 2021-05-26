@@ -1,11 +1,14 @@
-{	
+{
 	"version": "2.0.0",
 	"tasks": [
 		{
 			"type": "npm",
 			"script": "build",
 			"path": "ft-base/",
-			"group": "build",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
 			"problemMatcher": [],
 			"label": "npm: build - ft-base",
 			"detail": "webpack --mode production"
@@ -14,14 +17,13 @@
 			"type": "npm",
 			"script": "build",
 			"path": "ft-base/ui/",
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			},
+			"group": "build",
 			"problemMatcher": [],
 			"label": "npm: build - ft-base/ui",
 			"detail": "react-scripts build",
-			"dependsOn": ["npm: build - ft-base"]
+			"dependsOn": [
+				"npm: build - ft-base"
+			]
 		}
 	]
 }
