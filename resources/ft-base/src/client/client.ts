@@ -2,6 +2,7 @@ const debug = true;
 import { character } from "../shared/interfaces"
 
 let currentChar: character = undefined;
+let gamertag = -1;
 
 setTick(() => {
   // Turn off emergency/police/ems dispatch every frame
@@ -57,6 +58,16 @@ function debugLog(message: string)
   }
 }
 
+function UpdateGamertag() {
+  if (!gamertag) {
+    RemoveMpGamerTag(gamertag);
+  }
+  gamertag = CreateFakeMpGamerTag(PlayerPedId(), `[${currentChar.id}] ${currentChar.first_name} ${currentChar.last_name}`, false, false, "", 0);
+  SetMpGamerTagVisibility(gamertag, 0, true);
+  SetMpGamerTagAlpha(gamertag, 0, 200);
+  setTimeout(() => { SetMpGamerTagVisibility(gamertag, 0 , false)}, 2500);
+}
+
 on('playerSpawned', () => {
   if (!currentChar) {
     SendNuiMessage(JSON.stringify({ type: 'open', app: 'charSelect', forceChoice: true}))
@@ -67,6 +78,11 @@ on('playerSpawned', () => {
 RegisterCommand("debug", (_source: string, _args: Array<any>) => {
   SendNuiMessage(JSON.stringify({ type: 'open', app: 'main'}))
   SetNuiFocus(true, true);
+}, false);
+
+RegisterCommand('char', () => {
+  console.log(`[${currentChar.id}] ${currentChar.first_name} ${currentChar.last_name}`);
+  UpdateGamertag();
 }, false);
 
 RegisterNuiCallbackType('close')
@@ -85,14 +101,20 @@ onNet("ft-base:selectNewChar", (char: character) => {
   currentChar = char;
   emitNet('cui_character:requestCharData', currentChar, true)
   emit('cui_character:open', ['identity', 'features', 'style', 'apparel' ])
+  emitNet("ft-base:charSelected", currentChar)
 });
 
 RegisterNuiCallbackType('selectChar')
 on('__cfx_nui:selectChar', (data: any, callback: (...args) => void) => {
     currentChar = data as character;
     emitNet('cui_character:requestCharData', currentChar, false)
+    emitNet("ft-base:charSelected", currentChar)
     callback({});
 });
+
+onNet('cui_character:recievePlayerData', () => {
+  UpdateGamertag();
+})
 
 RegisterNuiCallbackType('newChar')
 on('__cfx_nui:newChar', (data: any, callback: (...args) => void) => {

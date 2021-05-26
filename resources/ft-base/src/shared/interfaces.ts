@@ -5,6 +5,8 @@ export interface character {
 	last_name: string;
 	dob?: Date,
 	address: string
+	cash: number;
+	bank: number;
 }
 
 export interface player {

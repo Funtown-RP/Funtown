@@ -15,7 +15,7 @@
 	"dependencies": {
 		"@citizenfx/client": "^1.0.2792-1",
 		"@citizenfx/server": "^1.0.2792-1",
-		"@types/node": "^14.14.45",
+		"@types/node": "^14.17.1",
 		"fivem-js": "^1.5.2",
 		"yarn": "^1.22.10"
 	},

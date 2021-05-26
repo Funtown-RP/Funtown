@@ -2,6 +2,7 @@ import { GetPlayerIdentifiers } from "./lib/identifiers";
 import * as players from "./classes/player";
 import * as characters from "./classes/character";
 import * as sql from "./lib/sql"
+import { character } from "../shared/interfaces";
 
 onNet('ft-core:tpm', () => {
   console.log(`TPM by ${source}`)
@@ -9,7 +10,7 @@ onNet('ft-core:tpm', () => {
 
 onNet('playerConnecting', () => {
   insertOrUpdatePlayer(source);
-})
+});
 
 function insertOrUpdatePlayer (src: string) {
   const identifiers = GetPlayerIdentifiers(src);
@@ -24,8 +25,12 @@ onNet('ft-base:loadCharacters', () => {
   characters.GetCharacters(GetPlayerIdentifiers(src).discord).then((chars) => {
     emitNet('ft-base:loadedCharacters', src, chars)
   });
-  
-})
+});
+
+onNet('ft-base:charSelected', (src: string, char: character) => {
+  characters.CharSelected(src, char);
+  console.log(`Client ${src} (${char.player_discord}) is now ${char.first_name} ${char.last_name} [${char.id}]`)
+});
 
 RegisterCommand('sql', (src: string) => {
   const identifiers = GetPlayerIdentifiers(src);
@@ -44,4 +49,16 @@ onNet('ft-base:newChar', (data: any) => {
 
 RegisterCommand("newchar", (src: string, args: string[]) => {
   characters.NewCharacter(src, GetPlayerIdentifiers(src).discord, args[0], args[1]);
+}, false)
+
+RegisterCommand("addcash", (src: string, args: string[]) => {
+  const amount = parseInt(args[0])
+  if (amount > 0) {
+    players.GetPlayerSrc(src).then((player) => {
+      if (player.is_admin || player.is_dev) {
+          characters.AddCash(characters.GetCurrentCharacter(src), amount);
+      }
+  })
+}
+
 }, false)

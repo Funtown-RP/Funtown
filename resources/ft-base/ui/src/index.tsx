@@ -26,7 +26,7 @@ class Main extends React.Component<any, MainState> {
 			if (event.data.type === "open") {
 				if (event.data.app === "main") {
 					this.setState({ state: State.main});
-				} else if (event.data.app === "charSelect") {
+				} else if (event.data.app === 'charSelect') {
 					this.setState({ state: State.charSelect, forceChoice: !!event.data.forceChoice });
 				}
 			}

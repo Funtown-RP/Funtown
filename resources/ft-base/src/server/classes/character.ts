@@ -3,6 +3,11 @@ import { character } from "../../shared/interfaces"
 
 const charactersId = new Cache<character>("characters", "id");
 const charactersDiscord = new ArrayCache<character>("characters", "player_discord");
+const currentCharacters: {[src: string]: character} = {};
+
+export function CharSelected(src: string, char: character): void {
+	currentCharacters[src] = char;
+}
 
 export async function GetCharacters(discord: string): Promise<character[]> {
 	return await charactersDiscord.get(discord);
@@ -10,6 +15,10 @@ export async function GetCharacters(discord: string): Promise<character[]> {
 
 export async function GetCharacter(characterID: string): Promise<character> {
 	return await charactersId.get(characterID);
+}
+
+export function GetCurrentCharacter(src: string): character {
+	return currentCharacters[src];
 }
 
 export async function CharacterChanged(discord: string): Promise<void> {
@@ -29,4 +38,28 @@ export async function NewCharacter(src: string, discord: string, firstName: stri
 			const newChar = await GetCharacter(result.insertId);
 			emitNet('ft-base:selectNewChar', src, newChar);
 		});
+}
+
+export function AddCash(char: character, amount: number): void {
+	execute("UPDATE characters SET cash = cash + ? WHERE id = ?", [amount, char.id], () => {
+		CharacterChanged(char.player_discord);
+	});
+}
+
+export function RemoveCash(char: character, amount: number): void {
+	execute("UPDATE characters SET cash = cash - ? WHERE id = ?", [amount, char.id], () => {
+		CharacterChanged(char.player_discord);
+	});
+}
+
+export function Withdraw(char: character, amount: number): void {
+	execute("UPDATE characters SET cash = cash + ?, bank = bank - ? WHERE id = ?", [amount, amount, char.id], () => {
+		CharacterChanged(char.player_discord);
+	});
+}
+
+export function Deposit(char: character, amount: number): void {
+	execute("UPDATE characters SET cash = cash - ?, bank = bank + ? WHERE id = ?", [amount, amount, char.id], () => {
+		CharacterChanged(char.player_discord);
+	});
 }
