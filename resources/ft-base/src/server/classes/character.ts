@@ -1,5 +1,6 @@
 import { Cache, ArrayCache, execute } from "../lib/sql"
 import { character } from "../../shared/interfaces"
+import { Event } from "../../shared/events"
 
 const charactersId = new Cache<character>("characters", "id");
 const charactersDiscord = new ArrayCache<character>("characters", "player_discord");
@@ -38,7 +39,7 @@ export async function CharacterChanged(discord: string): Promise<void> {
 		const src = GetCharacterSrc(character)
 		if (src !== "" && GetCurrentCharacter(src).id === character.id) {
 			GetCharacter(character.id).then((updatedChar: character) => {
-				emitNet("ft-base:characterUpdated", src, updatedChar)
+				emitNet(Event.characterUpdated, src, updatedChar)
 			})
 		}
 	}
@@ -51,7 +52,7 @@ export async function NewCharacter(src: string, discord: string, firstName: stri
 		async (result) => {
 			charactersDiscord.changed(discord);
 			const newChar = await GetCharacter(result.insertId);
-			emitNet('ft-base:selectNewChar', src, newChar);
+			emitNet(Event.selectedNewChar, src, newChar);
 		});
 }
 

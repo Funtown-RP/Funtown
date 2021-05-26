@@ -3,12 +3,13 @@ import * as players from "./classes/player";
 import * as characters from "./classes/character";
 import * as sql from "./lib/sql"
 import { character } from "../shared/interfaces";
+import { Event } from "../shared/events";
 
-onNet('ft-core:tpm', () => {
+onNet(Event.tpm, () => {
   console.log(`TPM by ${source}`)
 });
 
-onNet('playerConnecting', () => {
+onNet(Event.playerConnecting, () => {
   insertOrUpdatePlayer(source);
 });
 
@@ -20,14 +21,14 @@ function insertOrUpdatePlayer (src: string) {
     });
 }
 
-onNet('ft-base:loadCharacters', () => {
+onNet(Event.serverLoadCharacters, () => {
   const src = source;
   characters.GetCharacters(GetPlayerIdentifiers(src).discord).then((chars) => {
-    emitNet('ft-base:loadedCharacters', src, chars)
+    emitNet(Event.loadedCharacters, src, chars)
   });
 });
 
-onNet('ft-base:charSelected', (char: character) => {
+onNet(Event.serverCharSelected, (char: character) => {
   const src = source;
   characters.CharSelected(src, char);
   console.log(`Client ${src} [${char.player_discord}] is now [${char.id}] ${char.first_name} ${char.last_name}.`)
@@ -41,7 +42,7 @@ RegisterCommand('sql', (src: string) => {
     });
 }, false);
 
-onNet('ft-base:newChar', (data: any) => {
+onNet(Event.serverNewChar, (data: any) => {
   const src = source;
   const firstName = data.firstName || "First";
   const lastName = data.lastName || "Last";

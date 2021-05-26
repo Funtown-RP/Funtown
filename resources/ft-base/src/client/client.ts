@@ -1,7 +1,7 @@
-const debug = true;
 import { character } from "../shared/interfaces"
+import { Event } from "../shared/events";
+import { currentChar, setCurrentChar} from "./lib/char";
 
-let currentChar: character = undefined;
 let gamertag = -1;
 
 setTick(() => {
@@ -16,17 +16,16 @@ setTick(() => {
 
 RegisterCommand("tpm", () => {
   TeleportToMarker();
-  emitNet("ft-core:tpm");
+  emitNet(Event.tpm);
 }, false)
 
 function TeleportToMarker (): void {
   const marker = GetFirstBlipInfoId(8);
   if (DoesBlipExist(marker)) {
     const markerCoords = GetBlipInfoIdCoord(marker);
-    debugLog("Teleporting to marker.");
     TeleportToCoords(markerCoords[0], markerCoords[1]);
   } else {
-    debugLog("No marker found.");
+    console.log("No marker found.");
   }
 }
 
@@ -41,48 +40,40 @@ function TeleportFindZ(x: number, y: number) {
     const groundCoords = GetGroundZFor_3dCoord(x, y, height, false);
 
     if (groundCoords[0]) {
-      debugLog(height.toString());
       SetPedCoordsKeepVehicle(PlayerPedId(), x, y, groundCoords[1]);
       return;
     }
     
   }   
-  debugLog("Couldn't find ground, trying again");
   setTimeout(() => {TeleportFindZ(x, y); }, 100);
-}
-
-function debugLog(message: string)
-{
-  if (debug) {
-    console.log(message)
-  }
 }
 
 function UpdateGamertag() {
   if (!gamertag) {
     RemoveMpGamerTag(gamertag);
   }
-  gamertag = CreateFakeMpGamerTag(PlayerPedId(), `[${currentChar.id}] ${currentChar.first_name} ${currentChar.last_name}`, false, false, "", 0);
+  const curChar = currentChar();
+  gamertag = CreateFakeMpGamerTag(PlayerPedId(), `[${curChar.id}] ${curChar.first_name} ${curChar.last_name}`, false, false, "", 0);
   SetMpGamerTagVisibility(gamertag, 0, true);
   SetMpGamerTagAlpha(gamertag, 0, 200);
   setTimeout(() => { SetMpGamerTagVisibility(gamertag, 0 , false)}, 2500);
 }
 
-onNet('ft-base:characterUpdated', (char: character) => {
-  if (currentChar.id === char.id) {
-    currentChar = char;
+onNet(Event.characterUpdated, (char: character) => {
+  if (currentChar().id === char.id) {
+    setCurrentChar(char);
     console.log(`char updated: ${JSON.stringify(currentChar)}`);
   }
 })
 
-on('playerSpawned', () => {
+on(Event.playerSpawned, () => {
   if (!currentChar) {
     SendNuiMessage(JSON.stringify({ type: 'open', app: 'charSelect', forceChoice: true}))
     SetNuiFocus(true, true);
   }
 });
 
-on('onClientResourceStart', (resourceName: string) => {
+on(Event.clientResourceStarted, (resourceName: string) => {
   if (resourceName === GetCurrentResourceName()) {
     setTimeout(() => {
       SendNuiMessage(JSON.stringify({ type: 'open', app: 'charSelect', forceChoice: true}))
@@ -97,7 +88,8 @@ RegisterCommand("debug", (_source: string, _args: Array<any>) => {
 }, false);
 
 RegisterCommand('char', () => {
-  console.log(`[${currentChar.id}] ${currentChar.first_name} ${currentChar.last_name}`);
+  const curChar = currentChar();
+  console.log(`[${curChar.id}] ${curChar.first_name} ${curChar.last_name}`);
   UpdateGamertag();
 }, false);
 
@@ -109,20 +101,20 @@ on('__cfx_nui:close', (_data, callback) => {
 
 RegisterNuiCallbackType('getCharacters')
 on('__cfx_nui:getCharacters', (_data, callback) => {
-    emitNet('ft-base:loadCharacters')
+    emitNet(Event.serverLoadCharacters)
     callback({});
 });
 
 function SelectChar(char: character, isNew: boolean) {
-  currentChar = char;
-  emitNet('cui_character:requestCharData', currentChar, isNew);
-  emitNet("ft-base:charSelected", currentChar);
+  setCurrentChar(char);
+  emitNet(Event.loadCharSkin, currentChar(), isNew);
+  emitNet(Event.serverCharSelected, currentChar());
   if (isNew) {
-    emit('cui_character:open', ['identity', 'features', 'style', 'apparel' ])
+    emit(Event.openCharCustomization, ['identity', 'features', 'style', 'apparel' ])
   }
 }
 
-onNet("ft-base:selectNewChar", (char: character) => {
+onNet(Event.selectedNewChar, (char: character) => {
   SelectChar(char, true);
 });
 
@@ -138,15 +130,13 @@ onNet('cui_character:recievePlayerData', () => {
 
 RegisterNuiCallbackType('newChar')
 on('__cfx_nui:newChar', (data: any, callback: (...args) => void) => {
-    emitNet('ft-base:newChar', data)
+    emitNet(Event.serverNewChar, data)
     callback({});
 });
 
-onNet('ft-base:loadedCharacters', (characters: any) => {
+onNet(Event.loadedCharacters, (characters: any) => {
   SendNuiMessage(JSON.stringify({ app: 'charSelect', type: 'characters', characters: characters}));
 });
-
-global.exports('currentChar', () => {return currentChar});
 
 RegisterCommand("nuiq", () => {
   SetNuiFocus(false, false);
