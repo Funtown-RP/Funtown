@@ -1,9 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import { Button, Container, Grid, MenuItem, MenuList, Paper } from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
-import PersonIcon from '@material-ui/icons/Person';
+import { Container, MenuItem, MenuList, Paper } from '@material-ui/core';
 import { CharSelect } from './apps/charSelect';
 
 enum State {
