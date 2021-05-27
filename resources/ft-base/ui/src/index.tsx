@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import { Container, MenuItem, MenuList, Paper } from '@material-ui/core';
 import { CharSelect } from './apps/charSelect';
+import './index.scss'
 
 enum State {
 	closed,
@@ -35,7 +35,7 @@ class Main extends React.Component<any, MainState> {
 	Menu() {
 		return <Container maxWidth="xs" ><Paper >
 			<MenuList>
-				<MenuItem onClick={() => this.setState({ state: State.charSelect})}>Character Select</MenuItem>
+				<MenuItem onClick={() => this.setState({ state: State.charSelect, forceChoice: false})}>Character Select</MenuItem>
 				<MenuItem onClick={() => this.CloseApp()}>Close</MenuItem>
 			</MenuList>
 		</Paper></Container>

@@ -62,7 +62,7 @@ export class CharSelect extends React.Component<CharSelectProps, CharSelectState
 
 		this.setState({ 
 			characters: this.state?.characters,
-			newCharacter: this.state?.newCharacter,
+			newCharacter: true,
 			firstNameError: firstNameErr,
 			lastNameError: lastNameErr,
 			dobError: dobErr 
