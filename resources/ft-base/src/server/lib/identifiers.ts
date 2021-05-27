@@ -10,11 +10,11 @@ export function GetPlayerIdentifiers(src: string): identifiers {
 	for (let i = 0; i < GetNumPlayerIdentifiers(src); i++) {
 		const identifier = GetPlayerIdentifier(src, i);
 
-		if (identifier.startsWith('discord')) {
+		if (identifier.startsWith("discord")) {
 			discord = identifier;
 		}
 
-		if (identifier.startsWith('steam')) {
+		if (identifier.startsWith("steam")) {
 			steam = identifier;
 		}
 	}

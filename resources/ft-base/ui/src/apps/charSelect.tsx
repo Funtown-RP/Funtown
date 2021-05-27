@@ -7,7 +7,6 @@ import { character } from '../../../src/shared/interfaces';
 
 interface CharSelectState {
 	characters: character[];
-	forceChoice: boolean;
 }
 
 interface CharSelectProps {
@@ -41,7 +40,7 @@ export class CharSelect extends React.Component<CharSelectProps, CharSelectState
 
 	render() {
 		return <Grid container direction="column" alignItems="flex-start" spacing={2}>
-			<Grid item><Button variant="contained" color="secondary" endIcon={<CloseIcon />} onClick={() => this.props.close()} disabled={this.props.forceChoice }>Close</Button></Grid>
+			<Grid item><Button variant="contained" color="secondary" endIcon={<CloseIcon />} onClick={() => this.props.close()} disabled={this.props.forceChoice}>Close</Button></Grid>
 			{this.state?.characters.map((char) => {return <Grid item><Button variant="contained" onClick={() => this.selectChar(char)} >{char.first_name} {char.last_name}</Button></Grid>})}
 			<Grid item><Button variant="contained" color="primary" endIcon={<AddIcon />} onClick={() => this.newChar()} >New Character</Button></Grid>
 		</Grid>
@@ -52,7 +51,7 @@ function sendMessage (command: string, data?: any) {
 	if (!data) {
 		data = {};
 	}
-	fetch(`https://ft-base/${command}`, {
+	fetch(`https://ft-base/charselect:${command}`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json; charset=UTF-8',

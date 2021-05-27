@@ -5,7 +5,6 @@ import { Button, Grid } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import PersonIcon from '@material-ui/icons/Person';
 import { CharSelect } from './apps/charSelect';
-import { isChrome } from 'react-device-detect'
 
 enum State {
 	closed,
@@ -62,6 +61,24 @@ class Main extends React.Component<any, MainState> {
 		})
 	}
 
+	OpenMenuIfNoResponse() {
+		return Promise.race([
+			new Promise<boolean>((resolve: any) => { const wait = setTimeout(() => { clearTimeout(wait); resolve(true); }, 500) }),
+			fetch(`https://ft-base/debug:test`, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json; charset=UTF-8',
+					},
+					body: JSON.stringify({})
+				})
+		]).then((response: any) => { 
+			if (response === true) {
+				// timed out
+				this.setState({ state: State.main});
+			}
+		});
+	}
+
   	render() {
 	  	if (this.state?.state === State.charSelect) {
 			return <CharSelect close={() => this.CloseApp()} forceChoice={!!this.state.forceChoice} />
@@ -70,10 +87,8 @@ class Main extends React.Component<any, MainState> {
 			return this.Menu();
 	  	} else {
 		  	// Closed
-			  if (isChrome) {
-				  return this.Menu();
-			  }
-		  	return <div></div>;
+			this.OpenMenuIfNoResponse();
+			return <div></div>;
 	  	}
   	}
 }
