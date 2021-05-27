@@ -13,3 +13,8 @@ nui.onNui(NUIEvent.getCharacters, () => {
 nui.onNui(NUIEvent.newChar, (data) => {
 	emitNet(Event.serverNewChar, data);
 });
+
+nui.onNui(NUIEvent.test, () => {
+	// Keep this here!
+	// It's used to determine if the UI can find a GTA client.
+  });
