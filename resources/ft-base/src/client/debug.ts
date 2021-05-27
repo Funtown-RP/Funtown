@@ -44,34 +44,22 @@ function TeleportFindZ(x: number, y: number) {
 }
 
 nui.onNui(NUIEvent.test, () => {
-	//console.log('test command recieved')
+  // Keep this here!
+  // It's used to determine if the UI can find a GTA client
+	console.log('UI found!')
 });
 
-RegisterCommand(
-	"debug",
-	(_source: string, _args: Array<any>) => {
-		nui.SendMessage("main", "open");
-		nui.Focus();
-	},
-	false
-);
+RegisterCommand("debug", () => { 
+  nui.SendMessage("main", "open"); nui.Focus(); 
+}, false);
 
-RegisterCommand(
-	"char",
-	() => {
+RegisterCommand("char", () => {
 		const curChar = currentChar();
-		console.log(
-			`[${curChar.id}] ${curChar.first_name} ${curChar.last_name}`
-		);
+		console.log(`[${curChar?.id}] ${curChar?.first_name} ${curChar?.last_name}`);
 		UpdateGamertag();
-	},
-	false
+	}, false
 );
 
-RegisterCommand(
-	"nuiq",
-	() => {
-		nui.Unfocus();
-	},
-	false
-);
+RegisterCommand("nuiq", () => {
+  nui.Unfocus();
+}, false);

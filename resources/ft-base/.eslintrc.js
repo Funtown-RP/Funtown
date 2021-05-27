@@ -14,6 +14,6 @@ module.exports = {
   rules: {
     "@typescript-eslint/no-explicit-any": "off",
     "no-async-promise-executor": "off",
-	"function-call-argument-newline": "consistent"
+	"function-call-argument-newline": 0
   }
 };

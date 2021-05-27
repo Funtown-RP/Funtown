@@ -1,11 +1,13 @@
 import { character } from "../../shared/interfaces";
 import { Event } from "../../shared/events";
+import * as nui from "./nuiLib";
+import { NUIEvent } from "./nuiEvents";
 
 let currentCharacter: character = undefined;
 let gamertag = -1;
 
 global.exports("currentChar", () => {
-	return currentChar;
+	return currentCharacter;
 });
 
 export function currentChar(): character {
@@ -18,8 +20,8 @@ export function setCurrentChar(char: character): void {
 
 export function SelectChar(char: character, isNew: boolean): void {
 	setCurrentChar(char);
-	emitNet(Event.loadCharSkin, currentChar(), isNew);
-	emitNet(Event.serverCharSelected, currentChar());
+	emitNet(Event.loadCharSkin, char, isNew);
+	emitNet(Event.serverCharSelected, char);
 	if (isNew) {
 		emit(Event.openCharCustomization, ["identity", "features", "style", "apparel"]);
 	}
@@ -40,3 +42,15 @@ export function UpdateGamertag(): void {
 		SetMpGamerTagVisibility(gamertag, 0, false);
 	}, 2500);
 }
+
+onNet(Event.characterUpdated, (char: character) => {
+	const curChar = currentChar();
+	if (!curChar || curChar.id === char.id) {
+		setCurrentChar(char);
+		console.log(`char updated: ${JSON.stringify(currentChar)}`);
+	}
+});
+
+nui.onNui(NUIEvent.selectChar, (data) => {
+	SelectChar(data as character, false);
+});

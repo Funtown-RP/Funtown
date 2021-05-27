@@ -1,11 +1,6 @@
 import { character } from "../shared/interfaces";
 import { Event } from "../shared/events";
-import {
-	currentChar,
-	setCurrentChar,
-	UpdateGamertag,
-	SelectChar,
-} from "./lib/char";
+import { currentChar, UpdateGamertag, SelectChar} from "./lib/char";
 import * as nui from "./lib/nuiLib";
 
 setTick(() => {
@@ -18,15 +13,8 @@ setTick(() => {
 	ClearPlayerWantedLevel(PlayerId());
 });
 
-onNet(Event.characterUpdated, (char: character) => {
-	if (currentChar().id === char.id) {
-		setCurrentChar(char);
-		console.log(`char updated: ${JSON.stringify(currentChar)}`);
-	}
-});
-
 on(Event.playerSpawned, () => {
-	if (!currentChar) {
+	if (!currentChar()) {
 		nui.SendMessage("charSelect", "open", {forceChoice: true });
 		nui.Focus();
 	}

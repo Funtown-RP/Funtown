@@ -24,7 +24,7 @@ export function GetCurrentCharacter(src: string): character {
 
 export function GetCharacterSrc(char: character): string {
 	for (const src in currentCharacters) {
-		if (currentCharacters[src].id === char.id) {
+		if (currentCharacters[src]?.id === char.id) {
 			return src;
 		}
 	}
@@ -37,13 +37,13 @@ export async function CharacterChanged(discord: string): Promise<void> {
 		charactersId.changed(character.id.toString());
 
 		const src = GetCharacterSrc(character)
-		if (src !== "" && GetCurrentCharacter(src).id === character.id) {
+		const curChar = GetCurrentCharacter(src);
+		if (src !== "" && !curChar || (curChar.id === character.id)) {
 			GetCharacter(character.id).then((updatedChar: character) => {
 				emitNet(Event.characterUpdated, src, updatedChar)
 			})
 		}
 	}
-	charactersDiscord.changed(discord);
 }
 
 export async function NewCharacter(src: string, discord: string, firstName: string, lastName: string): Promise<void> {
