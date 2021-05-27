@@ -1,6 +1,6 @@
 import { GetPlayerIdentifiers } from "./lib/identifiers";
-import * as players from "./classes/player";
-import * as characters from "./classes/character";
+import * as players from "./lib/player";
+import * as characters from "./lib/character";
 import * as sql from "./lib/sql"
 import { character } from "../shared/interfaces";
 import { Event } from "../shared/events";

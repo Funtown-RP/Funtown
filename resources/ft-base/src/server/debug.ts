@@ -1,5 +1,5 @@
-import * as players from "./classes/player";
-import * as characters from "./classes/character";
+import * as players from "./lib/player";
+import * as characters from "./lib/character";
 import { GetPlayerIdentifiers } from "./lib/identifiers";
 
 RegisterCommand("addcash", (src: string, args: string[]) => {

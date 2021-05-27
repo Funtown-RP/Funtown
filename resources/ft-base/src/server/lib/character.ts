@@ -1,4 +1,4 @@
-import { Cache, ArrayCache, execute } from "../lib/sql"
+import { Cache, ArrayCache, execute } from "./sql"
 import { character } from "../../shared/interfaces"
 import { Event } from "../../shared/events"
 
