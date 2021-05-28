@@ -4,9 +4,9 @@ game 'gta5'
 name 'Funtown [base]'
 description "Funtown's core code"
 author 'adoggman@github'
--- url 'https://github.com/d0p3t/fivem-ts-boilerplate'
 
-loadscreen 'ui/build/loadscreen'
+loadscreen 'https://loadscreen'
+loadscreen_manual_shutdown 'yes'
 
 dependency 'ghmattimysql'
 
@@ -15,7 +15,7 @@ server_script 'dist/server/*.server.js'
 
 ui_page 'ui/build/index.html'
 files {
-	'ui/build/index.html',
+	'ui/build/*.html',
 	'ui/build/static/js/*.js',
 	'ui/build/static/css/*.css'
 }
