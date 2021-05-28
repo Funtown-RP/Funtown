@@ -17,4 +17,4 @@ nui.onNui(NUIEvent.newChar, (data) => {
 nui.onNui(NUIEvent.test, () => {
 	// Keep this here!
 	// It's used to determine if the UI can find a GTA client.
-  });
+});

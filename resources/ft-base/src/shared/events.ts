@@ -8,7 +8,7 @@ export enum Event {
 	serverCharSelected = "ft-base:charSelected",
 	serverNewChar = "ft-base:newChar",
 	loadCharSkin = "cui_character:requestCharData",
-	openCharCustomization = 'cui_character:open',
+	openCharCustomization = "cui_character:open",
 	playerSpawned = "playerSpawned",
 	clientResourceStarted = "onClientResourceStart"
 }

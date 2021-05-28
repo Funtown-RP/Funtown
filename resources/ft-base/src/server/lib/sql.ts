@@ -19,14 +19,14 @@ export function scalar (query: string, parameters?: any | Array<any>, callback?:
 export async function scalarSync (query: string, parameters?: any | Array<any>): Promise<any> {
 	return PromiseTimeout(
 		new Promise((resolve) => {
-			global.exports.ghmattimysql.scalar(query, parameters, (result: any) => { resolve(result) });
+			global.exports.ghmattimysql.scalar(query, parameters, (result: any) => { resolve(result); });
 		}),
 		timeout);
 }
 
 async function PromiseTimeout (promise: Promise<any>, ms: number): Promise<any> {
 	return Promise.race([
-		new Promise((_resolve, reject) => { const wait = setTimeout(() => { clearTimeout(wait); reject("timeout"); }, ms) }),
+		new Promise((_resolve, reject) => { const wait = setTimeout(() => { clearTimeout(wait); reject("timeout"); }, ms); }),
 		promise
 	]);
 }
@@ -59,7 +59,7 @@ export class Cache<T> {
 
 	constructor(table: string, keyColumn: string) {
 		this.cache = {};
-		this.multipleCache = {}
+		this.multipleCache = {};
 		this.query = `SELECT * FROM ${table} WHERE ${keyColumn} = ?`;
 	}
 

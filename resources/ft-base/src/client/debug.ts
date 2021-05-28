@@ -1,7 +1,6 @@
 import { currentChar, UpdateGamertag } from "./lib/char";
 import { Event } from "../shared/events";
 import * as nui from "./lib/nuiLib";
-import { NUIEvent } from "./lib/nuiEvents";
 
 RegisterCommand(
 	"tpm",
@@ -44,16 +43,16 @@ function TeleportFindZ(x: number, y: number) {
 }
 
 RegisterCommand("debug", () => { 
-  nui.SendMessage("main", "open"); nui.Focus(); 
+	nui.SendMessage("main", "open"); nui.Focus(); 
 }, false);
 
 RegisterCommand("char", () => {
-		const curChar = currentChar();
-		console.log(`[${curChar?.id}] ${curChar?.first_name} ${curChar?.last_name}`);
-		UpdateGamertag();
-	}, false
+	const curChar = currentChar();
+	console.log(`[${curChar?.id}] ${curChar?.first_name} ${curChar?.last_name}`);
+	UpdateGamertag();
+}, false
 );
 
 RegisterCommand("nuiq", () => {
-  nui.Unfocus();
+	nui.Unfocus();
 }, false);

@@ -1,6 +1,6 @@
-import { Cache, ArrayCache, execute } from "./sql"
-import { character } from "../../shared/interfaces"
-import { Event } from "../../shared/events"
+import { Cache, ArrayCache, execute } from "./sql";
+import { character } from "../../shared/interfaces";
+import { Event } from "../../shared/events";
 
 const charactersId = new Cache<character>("characters", "id");
 const charactersDiscord = new ArrayCache<character>("characters", "player_discord");
@@ -32,28 +32,27 @@ export function GetCharacterSrc(char: character): string {
 }
 
 export async function CharacterChanged(discord: string): Promise<void> {
-	const characters = await charactersDiscord.get(discord)
+	const characters = await charactersDiscord.get(discord);
 	for (const character of characters) {
 		charactersId.changed(character.id.toString());
 
-		const src = GetCharacterSrc(character)
+		const src = GetCharacterSrc(character);
 		const curChar = GetCurrentCharacter(src);
 		if (src !== "" && !curChar || (curChar.id === character.id)) {
 			GetCharacter(character.id).then((updatedChar: character) => {
-				emitNet(Event.characterUpdated, src, updatedChar)
-			})
+				emitNet(Event.characterUpdated, src, updatedChar);
+			});
 		}
 	}
 }
 
-export async function NewCharacter(src: string, discord: string, firstName: string, lastName: string): Promise<void> {
+export async function NewCharacter(src: string, discord: string, firstName: string, lastName: string, dob: Date): Promise<void> {
 	charactersDiscord.changed(discord);
-	execute("INSERT INTO characters (player_discord, first_name, last_name) VALUES (?, ?, ?)", [discord, firstName, lastName], 
-		async (result) => {
-			charactersDiscord.changed(discord);
-			const newChar = await GetCharacter(result.insertId);
-			emitNet(Event.selectedNewChar, src, newChar);
-		});
+	execute("INSERT INTO characters (player_discord, first_name, last_name, dob) VALUES (?, ?, ?, ?)", [discord, firstName, lastName, dob.toISOString().slice(0, 19).replace("T", " ")], async (result) => {
+		charactersDiscord.changed(discord);
+		const newChar = await GetCharacter(result.insertId);
+		emitNet(Event.selectedNewChar, src, newChar);
+	});
 }
 
 export function AddCash(char: character, amount: number): void {

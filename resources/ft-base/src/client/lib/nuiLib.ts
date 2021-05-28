@@ -17,6 +17,6 @@ export function Unfocus(): void {
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function SendMessage(app: string, type: string, data?: any): void {
-	const message = { app: app, type: type, ...data };
+	const message = {app: app, type: type, ...data};
 	SendNuiMessage(JSON.stringify(message));
 }

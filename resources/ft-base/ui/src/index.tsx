@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Container, MenuItem, MenuList, Paper } from '@material-ui/core';
+import { Container, createMuiTheme, MenuItem, MenuList, Paper, ThemeProvider } from '@material-ui/core';
 import { CharSelect } from './apps/charSelect';
 import './index.scss'
 
@@ -88,8 +88,27 @@ class Main extends React.Component<any, MainState> {
   	}
 }
 // ========================================
+const theme = createMuiTheme({
+	spacing: 4,
+	palette: {
+		type: 'dark',
+		secondary: {
+		  light: '#718792',
+		  main: '#455a64',
+		  dark: '#1c313a',
+		  contrastText: '#fff',
+		},
+		primary: {
+		  light: '#9162e4',
+		  main: '#5e35b1',
+		  dark: '#280680',
+		  contrastText: '#fff',
+		},
+	  },
+	  
+})
 
 ReactDOM.render(
-  <Main />,
+  <ThemeProvider theme={theme}><Main /></ThemeProvider>,
   document.getElementById('root')
 );

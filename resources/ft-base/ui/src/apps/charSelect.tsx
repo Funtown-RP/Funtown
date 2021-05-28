@@ -1,7 +1,8 @@
 import React from 'react';
-import { Button, Container, Grid, Paper, TextField } from '@material-ui/core';
+import { Button, Card, CardActions, CardContent, Container, Grid, Paper, TextField, Typography } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import AddIcon from '@material-ui/icons/Add'
+import CheckIcon from '@material-ui/icons/Check'
 import { character } from '../../../src/shared/interfaces';
 
 interface CharSelectState {
@@ -29,26 +30,26 @@ export class CharSelect extends React.Component<CharSelectProps, CharSelectState
 
 	constructor(props: any) {
 		super(props);
-		this.setState({ characters: [], newCharacter: false})
+		this.setState({ characters: [], newCharacter: false })
 
 		window.addEventListener('message', (event) => {
 			if (event.data.app === "charSelect" && event.data.type === "characters" && Array.isArray(event.data.characters)) {
 				this.setState({ characters: event.data.characters, newCharacter: false });
 			}
 		});
-		sendMessage('getCharacters');
+		sendMessage('getCharacters')
 	}
 
-	selectChar(char: character) {
+	selectChar (char: character) {
 		sendMessage('selectChar', char);
 		this.props.close();
 	}
 
-	startNewChar() {
-		this.setState({ characters: this.state?.characters, newCharacter: true});
+	startNewChar () {
+		this.setState({ characters: this.state?.characters, newCharacter: true });
 	}
 
-	newChar() {
+	newChar () {
 		let firstNameErr = false;
 		let lastNameErr = false;
 		let dobErr = false;
@@ -60,30 +61,57 @@ export class CharSelect extends React.Component<CharSelectProps, CharSelectState
 			dobErr = true;
 		}
 
-		this.setState({ 
+		this.setState({
 			characters: this.state?.characters,
 			newCharacter: true,
 			firstNameError: firstNameErr,
 			lastNameError: lastNameErr,
-			dobError: dobErr 
+			dobError: dobErr
 		});
 
 		if (firstNameErr || lastNameErr || dobErr) {
 			return;
 		}
 
-		sendMessage('newChar', { firstName: this.firstName, lastName: this.lastName, dob: this.dob});
+		sendMessage('newChar', { firstName: this.firstName, lastName: this.lastName, dob: this.dob });
 		this.props.close();
 	}
 
-	render() {
+	CharSelectCard (props: any) {
+		const char: character = props.char
+		return <Card variant="outlined" >
+			<CardContent>
+				<Typography variant="h5" component="h2">{char.first_name} {char.last_name}</Typography>
+				<Typography color="textSecondary">
+					Citizen #: <b>{char.id}</b>
+				</Typography>
+				<Typography color="textSecondary">
+					DOB: <b>{char.dob && new Date(char.dob).toLocaleDateString()}</b>
+				</Typography>
+				{char.address && <Typography color="textSecondary">
+					Address: <b>{char.address}</b>
+				</Typography>}
+			</CardContent>
+			<CardActions>
+				<Button style={{ color: 'lightGreen' }} size="medium" startIcon={<CheckIcon />} onClick={() => props.onSelect(char)} >Log in</Button>
+			</CardActions>
+		</Card>;
+	}
+
+	render () {
 		if (!this.state?.newCharacter) {
-			return <Container maxWidth="xs">
-				<Paper>
-					<Grid container direction="column" alignItems="flex-start" spacing={2}>
-						<Grid item><Button variant="contained" color="secondary" endIcon={<CloseIcon />} onClick={() => this.props.close()} disabled={this.props.forceChoice}>Close</Button></Grid>
-							{this.state?.characters?.map((char) => {return <Grid item><Button variant="contained" onClick={() => this.selectChar(char)} >{char.first_name} {char.last_name}</Button></Grid>})}
-						<Grid item><Button variant="contained" color="primary" endIcon={<AddIcon />} onClick={() => this.startNewChar()} >New Character</Button></Grid>
+			return <Container maxWidth="xs"  >
+				<Paper >
+					<Grid container direction="column" alignItems="stretch" spacing={2}>
+						{this.state?.characters?.map((char) => {
+							return <Grid item alignContent="stretch">
+								<this.CharSelectCard char={char} onSelect={(char: character) => this.selectChar(char)} />
+							</Grid>
+						})}
+						<Grid item sm style={{ justifyContent: 'center', display: 'flex' }}>
+							{!this.props.forceChoice && <Button variant="contained" color="secondary" endIcon={<CloseIcon />} onClick={() => this.props.close()} >Cancel</Button>}
+							<Button variant="contained" color="primary" endIcon={<AddIcon />} onClick={() => this.startNewChar()} >New Character</Button>
+						</Grid>
 					</Grid>
 				</Paper>
 			</Container>
@@ -92,22 +120,23 @@ export class CharSelect extends React.Component<CharSelectProps, CharSelectState
 				<Paper >
 					<form noValidate>
 						<Grid container direction="row" spacing={2} alignItems="center" alignContent="center" >
-						<Grid item xs={12}><Button variant="contained" color="secondary" endIcon={<CloseIcon />} onClick={() => this.setState({ characters: this.state?.characters, newCharacter: false})} >Cancel</Button></Grid>
-							<Grid item xs={6}><TextField label="First name" error={this.state.firstNameError} helperText="Required" required margin="normal" variant="filled" onChange={(ev) => { this.firstName = ev.target.value; }} /></Grid>
-							<Grid item xs={6}><TextField label="Last name" error={this.state.lastNameError} helperText="Required" required margin="normal" variant="filled" onChange={(ev) => { this.lastName = ev.target.value; }} /></Grid>
-							<Grid item xs={6}>
-								<TextField label="Date of birth" error={this.state.dobError} helperText="Required" required margin="normal" type="date" variant="filled" InputLabelProps={{ shrink: true,}}
-								onChange={(ev) => { this.dob = new Date(ev.target.value); }}  />
+							<Grid item xs={12} ><Button variant="contained" color="secondary" endIcon={<CloseIcon />} onClick={() => this.setState({ characters: this.state?.characters, newCharacter: false })} >Cancel</Button></Grid>
+							<Grid item xs={6} style={{ justifyContent: 'center', display: 'flex' }} ><TextField label="First name" error={this.state.firstNameError} helperText="Required" required margin="normal" variant="filled" onChange={(ev) => { this.firstName = ev.target.value; }} /></Grid>
+							<Grid item xs={6} style={{ justifyContent: 'center', display: 'flex' }} ><TextField label="Last name" error={this.state.lastNameError} helperText="Required" required margin="normal" variant="filled" onChange={(ev) => { this.lastName = ev.target.value; }} /></Grid>
+							<Grid item xs={6} style={{ justifyContent: 'center', display: 'flex' }} >
+								<TextField label="Date of birth" error={this.state.dobError} helperText="Required" required margin="normal" type="date" variant="filled" InputLabelProps={{ shrink: true, }}
+									onChange={(ev) => { this.dob = new Date(ev.target.value); }} />
 							</Grid>
-							<Grid item xs={6}><Button variant="contained" color="primary" endIcon={<AddIcon />} onClick={() => {this.newChar();}} >Create Character</Button></Grid>
+							<Grid item xs={6} style={{ justifyContent: 'center', display: 'flex' }} ><Button variant="contained" color="primary" endIcon={<AddIcon />} onClick={() => { this.newChar(); }} >Create Character</Button></Grid>
 						</Grid>
 					</form>
 				</Paper>
 			</Container>
 		}
-		
 	}
 }
+
+
 
 function sendMessage (command: string, data?: any) {
 	if (!data) {
