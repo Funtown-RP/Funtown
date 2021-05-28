@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NUIEvent } from "./nuiEvents";
 
 export function onNui(nuiEvent: NUIEvent, handler: (data: any) => any): void {

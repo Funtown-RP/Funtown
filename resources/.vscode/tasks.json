@@ -5,10 +5,7 @@
 			"type": "npm",
 			"script": "build",
 			"path": "ft-base/",
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			},
+			"group": "build",
 			"problemMatcher": [],
 			"label": "npm: build - ft-base",
 			"detail": "webpack --mode production"
@@ -17,7 +14,10 @@
 			"type": "npm",
 			"script": "build",
 			"path": "ft-base/ui/",
-			"group": "build",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
 			"problemMatcher": [],
 			"label": "npm: build - ft-base/ui",
 			"detail": "react-scripts build",

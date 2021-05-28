@@ -37,6 +37,7 @@ onNet("cui_character:recievePlayerData", () => {
 	UpdateGamertag();
 });
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 onNet(Event.loadedCharacters, (characters: any) => {
 	nui.SendMessage("charSelect", "characters", { characters: characters });
 });

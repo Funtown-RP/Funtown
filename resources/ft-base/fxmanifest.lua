@@ -6,7 +6,7 @@ description "Funtown's core code"
 author 'adoggman@github'
 -- url 'https://github.com/d0p3t/fivem-ts-boilerplate'
 
--- loadscreen 'https://hostrider.com/'
+loadscreen 'ui/build/loadscreen'
 
 dependency 'ghmattimysql'
 

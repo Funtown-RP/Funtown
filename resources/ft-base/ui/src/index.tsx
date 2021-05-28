@@ -2,7 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Container, createMuiTheme, MenuItem, MenuList, Paper, ThemeProvider } from '@material-ui/core';
 import { CharSelect } from './apps/charSelect';
+import { Loadscreen } from "./apps/loadscreen";
 import './index.scss'
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 enum State {
 	closed,
@@ -102,13 +104,23 @@ const theme = createMuiTheme({
 		  light: '#9162e4',
 		  main: '#5e35b1',
 		  dark: '#280680',
-		  contrastText: '#fff',
+			contrastText: '#fff',
 		},
-	  },
-	  
+	},
 })
 
 ReactDOM.render(
-  <ThemeProvider theme={theme}><Main /></ThemeProvider>,
+	<ThemeProvider theme={theme}>
+		<Router>
+			<Switch>
+				<Route path="/loadscreen">
+					<Loadscreen />
+				</Route>
+				<Route path="/">
+					<Main />
+				</Route>
+			</Switch>
+		</Router>
+	</ThemeProvider>,
   document.getElementById('root')
 );

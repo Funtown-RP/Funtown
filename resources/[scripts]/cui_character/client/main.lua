@@ -1305,6 +1305,10 @@ function ClearAllAnimations()
     end
 end
 
+exports('LoadCharacter', function(data, playIdleAnim, callback)
+	LoadCharacter(data, playIdleAnim, callback)
+end)
+
 -- Loading character data
 function LoadCharacter(data, playIdleWhenLoaded, callback)
     for k, v in pairs(data) do
@@ -1414,11 +1418,6 @@ function LoadCharacter(data, playIdleWhenLoaded, callback)
         ClearPedProp(playerPed, 2)
     else
         SetPedPropIndex (playerPed, 2, data.ears_1, data.ears_2, 2)             -- Ear Accessory
-    end
-
-    if not Config.StandAlone then
-        ESX.SetPlayerData('loadout', oldLoadout)
-        TriggerEvent('esx:restoreLoadout')
     end
 
     if callback ~= nil then
