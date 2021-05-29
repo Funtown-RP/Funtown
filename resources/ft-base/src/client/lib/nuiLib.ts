@@ -1,6 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NUIEvent } from "./nuiEvents";
 
+export enum App {
+	menu = "main",
+	charSelect = "charSelect",
+}
+
 export function onNui(nuiEvent: NUIEvent, handler: (data: any) => any): void {
 	RegisterNuiCallbackType(nuiEvent);
 	on(`__cfx_nui:${nuiEvent}`, (data, callback) => {
@@ -20,4 +25,12 @@ export function Unfocus(): void {
 export function SendMessage(app: string, type: string, data?: any): void {
 	const message = {app: app, type: type, ...data};
 	SendNuiMessage(JSON.stringify(message));
+}
+
+export function OpenApp(app: App, focus = true): void {
+	const message = { app: app, type: "open" };
+	SendNuiMessage(JSON.stringify(message));
+	if (focus) {
+		Focus(true);
+	}
 }

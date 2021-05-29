@@ -93,7 +93,7 @@ export class CharSelect extends React.Component<CharSelectProps, CharSelectState
 				</Typography>}
 			</CardContent>
 			<CardActions>
-				<Button style={{ color: 'lightGreen' }} size="medium" startIcon={<CheckIcon />} onClick={() => props.onSelect(char)} >Log in</Button>
+				<Button color="primary" size="medium" startIcon={<CheckIcon />} onClick={() => props.onSelect(char)} >Log in</Button>
 			</CardActions>
 		</Card>;
 	}

@@ -35,10 +35,12 @@ class Main extends React.Component<any, MainState> {
 	}
 
 	Menu() {
-		return <Container maxWidth="xs" ><Paper >
-			<MenuList>
-				<MenuItem onClick={() => this.setState({ state: State.charSelect, forceChoice: false})}>Character Select</MenuItem>
-				<MenuItem onClick={() => this.CloseApp()}>Close</MenuItem>
+		return <Container style={{width: 'auto'}} ><Paper >
+			<MenuList  >
+				<MenuItem style={{ justifyContent: 'center', display: 'flex' }} 
+					onClick={() => this.setState({ state: State.charSelect, forceChoice: false})}>Character Select</MenuItem>
+				<MenuItem style={{ justifyContent: 'center', display: 'flex' }}
+					onClick={() => this.CloseApp()}>Close</MenuItem>
 			</MenuList>
 		</Paper></Container>
 	}
@@ -94,17 +96,17 @@ const theme = createMuiTheme({
 	spacing: 4,
 	palette: {
 		type: 'dark',
-		secondary: {
-		  light: '#718792',
-		  main: '#455a64',
-		  dark: '#1c313a',
-		  contrastText: '#fff',
-		},
 		primary: {
-		  light: '#9162e4',
-		  main: '#5e35b1',
-		  dark: '#280680',
-			contrastText: '#fff',
+		  light: '#b2fab4',
+		  main: '#81c784',
+		  dark: '#1c519657313a',
+		  contrastText: '#000',
+		},
+		secondary: {
+		  light: '#ffa4a2',
+		  main: '#e57373',
+		  dark: '#af4448',
+			contrastText: '#000',
 		},
 	},
 })
