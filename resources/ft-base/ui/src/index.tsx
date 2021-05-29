@@ -35,7 +35,7 @@ class Main extends React.Component<any, MainState> {
 	}
 
 	Menu() {
-		return <Container style={{width: 'auto'}} ><Paper >
+		return <Container style={{width: 'auto'}} ><Paper style={{padding: "12px", margin: "16px"}}>
 			<MenuList  >
 				<MenuItem style={{ justifyContent: 'center', display: 'flex' }} 
 					onClick={() => this.setState({ state: State.charSelect, forceChoice: false})}>Character Select</MenuItem>

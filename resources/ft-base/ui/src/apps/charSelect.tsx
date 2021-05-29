@@ -100,15 +100,15 @@ export class CharSelect extends React.Component<CharSelectProps, CharSelectState
 
 	render () {
 		if (!this.state?.newCharacter) {
-			return <Container maxWidth="xs"  >
-				<Paper >
+			return <Container maxWidth="sm"  >
+				<Paper style={{padding: "32px", margin: "16px"}} >
 					<Grid container direction="column" alignItems="stretch" spacing={2}>
 						{this.state?.characters?.map((char) => {
-							return <Grid item alignContent="stretch">
+							return <Grid item alignContent="stretch" style={{ margin: "8px" }}>
 								<this.CharSelectCard char={char} onSelect={(char: character) => this.selectChar(char)} />
 							</Grid>
 						})}
-						<Grid item sm style={{ justifyContent: 'center', display: 'flex' }}>
+						<Grid item sm style={{ justifyContent: 'space-around', display: 'flex' }}>
 							{!this.props.forceChoice && <Button variant="contained" color="secondary" endIcon={<CloseIcon />} onClick={() => this.props.close()} >Cancel</Button>}
 							<Button variant="contained" color="primary" endIcon={<AddIcon />} onClick={() => this.startNewChar()} >New Character</Button>
 						</Grid>

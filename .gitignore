@@ -3,3 +3,5 @@ cache
 **/node_modules
 **/dist
 Start.bat
+**/yarn.lock
+**/package-lock.json

@@ -1,2 +1,2 @@
 @echo off
-npm install && npm run build && cd ./ui/ && yarn install && yarn run build
+yarn install && yarn --cwd ~/ui/ install && yarn build-all && pause

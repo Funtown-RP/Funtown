@@ -19,6 +19,8 @@
 		"**/README.md": true,
 		"**/dist": true,
 		"**/tsconfig.json": true,
-		"**/*.lnk": true
+		"**/*.lnk": true,
+		"**/.yarnclean": true,
+		"**/react-app-env.d.ts": true
 	},
 }
