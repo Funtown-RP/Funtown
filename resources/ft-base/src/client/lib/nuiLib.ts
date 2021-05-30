@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { NUIEvent } from "./nuiEvents";
+import NUIEvent from "./nuiEvents";
 
 export enum App {
 	menu = "main",

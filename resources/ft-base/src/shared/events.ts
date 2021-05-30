@@ -12,3 +12,5 @@ export enum Event {
 	playerSpawned = "playerSpawned",
 	clientResourceStarted = "onClientResourceStart"
 }
+
+export default Event;

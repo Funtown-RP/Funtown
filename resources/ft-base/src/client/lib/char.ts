@@ -1,7 +1,7 @@
 import { character } from "../../shared/interfaces";
-import { Event } from "../../shared/events";
+import Event from "../../shared/events";
 import * as nui from "./nuiLib";
-import { NUIEvent } from "./nuiEvents";
+import NUIEvent from "../lib/nuiEvents";
 
 let currentCharacter: character = undefined;
 let gamertag = -1;

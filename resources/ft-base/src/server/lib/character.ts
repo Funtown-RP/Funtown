@@ -1,6 +1,6 @@
 import { Cache, ArrayCache, execute } from "./sql";
 import { character } from "../../shared/interfaces";
-import { Event } from "../../shared/events";
+import Event from "../../shared/events";
 
 const charactersId = new Cache<character>("characters", "id");
 const charactersDiscord = new ArrayCache<character>("characters", "player_discord");
@@ -31,6 +31,9 @@ export function GetCharacterSrc(char: character): string {
 	return "";
 }
 
+/**
+ * Mark a character as having changed
+ */
 export async function CharacterChanged(discord: string): Promise<void> {
 	const characters = await charactersDiscord.get(discord);
 	for (const character of characters) {

@@ -1,5 +1,5 @@
 import { character } from "../shared/interfaces";
-import { Event } from "../shared/events";
+import Event from "../shared/events";
 import { currentChar, UpdateGamertag, SelectChar} from "./lib/char";
 import * as nui from "./lib/nuiLib";
 

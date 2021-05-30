@@ -1,6 +1,6 @@
 import * as nui from "./lib/nuiLib";
-import { NUIEvent } from "./lib/nuiEvents";
-import { Event } from "./../shared/events";
+import NUIEvent from "./lib/nuiEvents";
+import Event from "./../shared/events";
 
 nui.onNui(NUIEvent.close, () => {
 	nui.Unfocus();

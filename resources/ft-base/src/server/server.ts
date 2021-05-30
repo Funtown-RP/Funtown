@@ -3,7 +3,7 @@ import * as players from "./lib/player";
 import * as characters from "./lib/character";
 import * as sql from "./lib/sql";
 import { character } from "../shared/interfaces";
-import { Event } from "../shared/events";
+import Event from "../shared/events";
 
 onNet(Event.tpm, () => {
 	console.log(`TPM by ${source}`);

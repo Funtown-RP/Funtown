@@ -1,5 +1,5 @@
 import { currentChar, UpdateGamertag } from "./lib/char";
-import { Event } from "../shared/events";
+import Event from "../shared/events";
 import * as nui from "./lib/nuiLib";
 
 RegisterCommand(
