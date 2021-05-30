@@ -4,6 +4,9 @@ import CloseIcon from '@material-ui/icons/Close';
 import AddIcon from '@material-ui/icons/Add'
 import CheckIcon from '@material-ui/icons/Check'
 import { character } from '../../../src/shared/interfaces';
+import { SendMessage } from '../lib/nui';
+
+const appName = "charselect";
 
 interface CharSelectState {
 	characters: character[];
@@ -37,11 +40,11 @@ export class CharSelect extends React.Component<CharSelectProps, CharSelectState
 				this.setState({ characters: event.data.characters, newCharacter: false });
 			}
 		});
-		sendMessage('getCharacters')
+		SendMessage(appName, 'getCharacters')
 	}
 
 	selectChar (char: character) {
-		sendMessage('selectChar', char);
+		SendMessage(appName, 'selectChar', char);
 		this.props.close();
 	}
 
@@ -49,7 +52,7 @@ export class CharSelect extends React.Component<CharSelectProps, CharSelectState
 		this.setState({ characters: this.state?.characters, newCharacter: true });
 	}
 
-	newChar () {
+	isNewCharValid(): boolean {
 		let firstNameErr = false;
 		let lastNameErr = false;
 		let dobErr = false;
@@ -69,15 +72,18 @@ export class CharSelect extends React.Component<CharSelectProps, CharSelectState
 			dobError: dobErr
 		});
 
-		if (firstNameErr || lastNameErr || dobErr) {
+		return firstNameErr || lastNameErr || dobErr;
+	}
+
+	newChar () {
+		if (!this.isNewCharValid()) {
 			return;
 		}
-
-		sendMessage('newChar', { firstName: this.firstName, lastName: this.lastName, dob: this.dob });
+		SendMessage(appName, 'newChar', { firstName: this.firstName, lastName: this.lastName, dob: this.dob });
 		this.props.close();
 	}
 
-	CharSelectCard (props: any) {
+	CharSelectCard(props: any) {
 		const char: character = props.char
 		return <Card variant="outlined" >
 			<CardContent>
@@ -134,19 +140,4 @@ export class CharSelect extends React.Component<CharSelectProps, CharSelectState
 			</Container>
 		}
 	}
-}
-
-
-
-function sendMessage (command: string, data?: any) {
-	if (!data) {
-		data = {};
-	}
-	fetch(`https://ft-base/charselect:${command}`, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json; charset=UTF-8',
-		},
-		body: JSON.stringify(data)
-	});
 }

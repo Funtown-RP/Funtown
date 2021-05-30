@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const timeout = 500;
 
 export function execute (query: string, parameters?: any | Array<any>, callback?: (result: any) => void): void {

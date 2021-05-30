@@ -1,5 +1,5 @@
 export enum NUIEvent {
-	close = "close",
+	close = "ui:close",
 	getCharacters = "charselect:getCharacters",
 	selectChar = "charselect:selectChar",
 	newChar = "charselect:newChar",
