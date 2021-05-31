@@ -4,7 +4,7 @@ import * as characters from "./lib/character";
 import * as sql from "./lib/sql";
 import { character } from "../shared/interfaces";
 import Event from "../shared/events";
-import { GetItems } from "./lib/items";
+import { GetItem, GetItems } from "./lib/items";
 
 onNet(Event.tpm, () => {
 	console.log(`TPM by ${source}`);
@@ -50,4 +50,9 @@ onNet(Event.playerConnecting, () => {
 
 RegisterCommand("items", (src: string) => {
 	emitNet(Event.itemDefinitions, src, GetItems());
+}, false);
+
+RegisterCommand("item", (src: string, args: string[]) => {
+	console.log(JSON.stringify(args));
+	console.log(JSON.stringify(GetItem(args[0])));
 }, false);

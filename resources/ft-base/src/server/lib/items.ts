@@ -2,14 +2,16 @@ import { TableCache } from "../lib/sql";
 import { item } from "../../shared/interfaces";
 
 const items = new TableCache<item>("items");
-const itemDict: Record<string, item> = {};
+let itemDict: Record<string, item> = {};
 
 function tryBuildDict() {
 	if (items.isLoaded) {
-		const itemDict: Record<string, item> = {};
-		for (const item of items.rows()) {
+		itemDict = {};
+		const rows = items.rows();
+		for (const item of rows) {
 			itemDict[item.key] = item;
 		}	
+		console.log(JSON.stringify(itemDict));
 	} else {
 		setTimeout(tryBuildDict, 100);
 	}
@@ -25,7 +27,11 @@ export function GetItems(): Array<item> {
 	return items.rows();
 }
 
-export async function GetItem(itemKey: string): Promise<item> {
+export function GetItem(itemKey: string): item {
+	if (!itemDict) {
+		console.error("Tried to get an item but the item definition dictionary is empty");
+		tryBuildDict();
+	}
 	return itemDict[itemKey];
 }
 

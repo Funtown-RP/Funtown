@@ -50,8 +50,7 @@ RegisterCommand("char", () => {
 	const curChar = currentChar();
 	console.log(`[${curChar?.id}] ${curChar?.first_name} ${curChar?.last_name}`);
 	UpdateGamertag();
-}, false
-);
+}, false);
 
 RegisterCommand("nuiq", () => {
 	nui.Unfocus();
