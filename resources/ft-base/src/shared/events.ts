@@ -10,7 +10,8 @@ export enum Event {
 	loadCharSkin = "cui_character:requestCharData",
 	openCharCustomization = "cui_character:open",
 	playerSpawned = "playerSpawned",
-	clientResourceStarted = "onClientResourceStart"
+	clientResourceStarted = "onClientResourceStart",
+	itemDefinitions = "ft-base:item-definitions"
 }
 
 export default Event;

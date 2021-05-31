@@ -4,6 +4,7 @@ import * as characters from "./lib/character";
 import * as sql from "./lib/sql";
 import { character } from "../shared/interfaces";
 import Event from "../shared/events";
+import { GetItems } from "./lib/items";
 
 onNet(Event.tpm, () => {
 	console.log(`TPM by ${source}`);
@@ -40,3 +41,13 @@ onNet(Event.serverNewChar, (data) => {
 	const dob = new Date(data.dob);
 	characters.NewCharacter(src, GetPlayerIdentifiers(src).discord, firstName, lastName, dob);
 });
+
+onNet(Event.playerConnecting, () => {
+	const src = source;
+	console.log("sending items");
+	emitNet(Event.itemDefinitions, src, GetItems());
+});
+
+RegisterCommand("items", (src: string) => {
+	emitNet(Event.itemDefinitions, src, GetItems());
+}, false);

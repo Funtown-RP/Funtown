@@ -115,3 +115,32 @@ export class ArrayCache<T> {
 		delete this.cache[key];
 	}
 }
+
+export class TableCache<T> {
+	cache: Array<T>;
+	query: string;
+	isLoaded = false;
+
+	constructor(table: string) {
+		this.cache = [];
+		this.query = `SELECT * FROM ${table}`;
+		this.load();
+	}
+
+	rows(): Array<T> {
+		return this.cache;
+	}
+
+	getRows = this.rows;
+
+	async refresh(): Promise<void> {
+		return this.load();
+	}
+
+	private async load(): Promise<void> {
+		this.cache = [];
+		this.cache = await executeSync(this.query);
+		this.isLoaded = true;
+		return;
+	}
+}

@@ -16,3 +16,25 @@ export interface player {
 	is_admin: boolean;
 	is_dev: boolean;
 }
+
+export enum InventoryType {
+	player = "Player",
+	storage = "Storage"
+}
+
+export interface inventory {
+	id: number;
+	name: string;
+	type: InventoryType;
+	char_id: number;
+	storage_key: string;
+	contents: string;
+}
+
+export interface item {
+	id: number;
+	key: string;
+	name: string;
+	weight: number;
+	max_stack: number;
+}
