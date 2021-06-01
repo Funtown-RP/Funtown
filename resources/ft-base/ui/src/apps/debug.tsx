@@ -9,7 +9,7 @@ export interface DebugScreenProps {
 }
 
 export interface DebugScreenState {
-	value: number;
+	tab: number;
 	items: item[];
 }
 
@@ -17,7 +17,7 @@ export class DebugScreen extends React.Component<DebugScreenProps, DebugScreenSt
 
 	constructor(props: DebugScreenProps) {
 		super(props)
-		this.state = { value: 0, items: [] };
+		this.state = { tab: 0, items: [] };
 		this.getItems();
 
 		this.getItems = this.getItems.bind(this);
@@ -27,7 +27,7 @@ export class DebugScreen extends React.Component<DebugScreenProps, DebugScreenSt
 	getItems() {
 		SendMessage("debug", "items").then((response) => {
 			if (!!response) {
-				this.setState({value: this.state.value, items: response});
+				this.setState({tab: this.state.tab, items: response});
 			}
 		});
 	}
@@ -61,14 +61,14 @@ export class DebugScreen extends React.Component<DebugScreenProps, DebugScreenSt
 		return <Container maxWidth="md" >
 			<Paper style={{padding: "32px", margin: "16px"}} >
 				<Button variant="contained" color="secondary" endIcon={<CloseIcon />} onClick={() => this.props.close()} >Close</Button>
-				<Tabs centered value={this.state.value} style={{ marginBottom: "24px" }} onChange={(event: object, value: number) => {
-					this.setState({value: value});
+				<Tabs centered value={this.state.tab} style={{ marginBottom: "24px" }} onChange={(event: object, value: number) => {
+					this.setState({tab: value});
 				}}>
 					<Tab label="Item Definitions" />
 					<Tab label="Test" />
 				</Tabs>
-				{this.state.value === 0 && <this.itemDefs />}
-				{this.state.value === 1 && <Typography variant="h5" component="h2" style={{display: 'flex', justifyContent: 'center'}}>Test tab</Typography>}
+				{this.state.tab === 0 && <this.itemDefs />}
+				{this.state.tab === 1 && <Typography variant="h5" component="h2" style={{display: 'flex', justifyContent: 'center'}}>Test tab</Typography>}
 			</Paper>
 		</Container>
 	}
