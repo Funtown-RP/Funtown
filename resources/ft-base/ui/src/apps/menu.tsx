@@ -22,6 +22,10 @@ export class Menu extends React.Component<any, MenuState> {
 		super(props);
 		this.state = { state: State.closed };
 
+		this.Menu = this.Menu.bind(this);
+		this.OpenMenuIfNoResponse = this.OpenMenuIfNoResponse.bind(this);
+		this.CloseApp = this.CloseApp.bind(this);
+
 		window.addEventListener('message', (event) => {
 			if (event.data.type === "open") {
 				if (event.data.app === "main") {
@@ -70,17 +74,16 @@ export class Menu extends React.Component<any, MenuState> {
 	}
 
   	render() {
-	  	if (this.state?.state === State.charSelect) {
-			return <CharSelect close={() => this.CloseApp()} forceChoice={!!this.state.forceChoice} />
-	  	} else if (this.state?.state === State.main) {
-		  	// Main menu
-			return this.Menu();
-		} else if (this.state?.state === State.debug) {
-			return <DebugScreen close={() => this.CloseApp()} />
-	  	} else {
-		  	// Closed
-			this.OpenMenuIfNoResponse();
-			return <div></div>;
+		switch (this.state?.state) {
+			case State.charSelect:
+				return <CharSelect close={() => this.CloseApp()} forceChoice={!!this.state.forceChoice} />;
+			case State.main:
+				return <this.Menu />;
+			case State.debug:
+				return <DebugScreen close={() => this.CloseApp()} />;
+			default:
+				this.OpenMenuIfNoResponse();
+				return <div></div>;
 	  	}
   	}
 }
