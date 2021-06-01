@@ -1,5 +1,5 @@
 import React from 'react';
-import { TableRow, TableCell, Paper, TableContainer, Table, TableHead, TableBody, Container, Button, Card, Tabs, Tab, Typography, Box } from '@material-ui/core';
+import { TableRow, TableCell, Paper, TableContainer, Table, TableHead, TableBody, Container, Button, Card, Tabs, Tab, Typography } from '@material-ui/core';
 import { SendMessage } from "../lib/nui"
 import { item } from '../../../src/shared/interfaces';
 import CloseIcon from '@material-ui/icons/Close';
