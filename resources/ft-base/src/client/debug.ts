@@ -1,6 +1,9 @@
 import { currentChar, UpdateGamertag } from "./lib/char";
 import Event from "../shared/events";
 import * as nui from "./lib/nuiLib";
+import NUIEvent from "./lib/nuiEvents";
+import { AllItems } from "./items";
+import { item } from "../shared/interfaces";
 
 RegisterCommand(
 	"tpm",
@@ -55,3 +58,12 @@ RegisterCommand("char", () => {
 RegisterCommand("nuiq", () => {
 	nui.Unfocus();
 }, false);
+
+nui.onNui(NUIEvent.getItems, (): Array<item> => {
+	const allItems = AllItems();
+	if (allItems.length === 0) {
+		emitNet(Event.getItemDefinitions);
+		console.log("refresh again please");
+	}
+	return allItems;
+});

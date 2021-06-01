@@ -4,6 +4,7 @@ enum NUIEvent {
 	selectChar = "charselect:selectChar",
 	newChar = "charselect:newChar",
 	test = "debug:test",
+	getItems = "debug:items"
 }
 
 export default NUIEvent;

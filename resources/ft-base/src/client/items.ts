@@ -10,9 +10,6 @@ onNet(Event.itemDefinitions, (itemDefs: item[]) => {
 	for (const item of items) {
 		itemDict[item.key] = item;
 	}	
-
-	console.log(JSON.stringify(items));
-	console.log(JSON.stringify(itemDict));
 });
 
 export function GetItem(key: string): item {

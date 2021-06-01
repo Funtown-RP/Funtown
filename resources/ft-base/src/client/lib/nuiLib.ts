@@ -9,7 +9,8 @@ export enum App {
 export function onNui(nuiEvent: NUIEvent, handler: (data: any) => any): void {
 	RegisterNuiCallbackType(nuiEvent);
 	on(`__cfx_nui:${nuiEvent}`, (data, callback) => {
-		callback(handler(data));
+		const result = handler(data);
+		callback(result);
 	});
 }
 

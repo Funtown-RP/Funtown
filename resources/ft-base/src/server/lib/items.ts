@@ -11,7 +11,6 @@ function tryBuildDict() {
 		for (const item of rows) {
 			itemDict[item.key] = item;
 		}	
-		console.log(JSON.stringify(itemDict));
 	} else {
 		setTimeout(tryBuildDict, 100);
 	}

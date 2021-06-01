@@ -2,6 +2,7 @@ import { character } from "../../shared/interfaces";
 import Event from "../../shared/events";
 import * as nui from "./nuiLib";
 import NUIEvent from "../lib/nuiEvents";
+import { AllItems } from "../items";
 
 let currentCharacter: character = undefined;
 let gamertag = -1;
@@ -24,6 +25,12 @@ export function SelectChar(char: character, isNew: boolean): void {
 	emitNet(Event.serverCharSelected, char);
 	if (isNew) {
 		emit(Event.openCharCustomization, ["identity", "features", "style", "apparel"]);
+	}
+	
+	const allItems = AllItems();
+	if (allItems.length === 0) {
+		// this helps debugging, don't have to reconnect to server to get items
+		emitNet(Event.getItemDefinitions);
 	}
 }
 

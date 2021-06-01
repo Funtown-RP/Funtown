@@ -2,11 +2,13 @@ import { Container, MenuItem, MenuList, Paper } from "@material-ui/core";
 import React from "react";
 import { CharSelect } from "./charSelect";
 import { SendMessage } from "../lib/nui";
+import { DebugScreen } from "./debug";
 
 enum State {
 	closed,
 	main,
-	charSelect
+	charSelect,
+	debug
 }
 
 interface MenuState {
@@ -37,6 +39,8 @@ export class Menu extends React.Component<any, MenuState> {
 				<MenuList  >
 					<MenuItem style={{ justifyContent: 'center', display: 'flex' }} 
 						onClick={() => this.setState({ state: State.charSelect, forceChoice: false})}>Character Select</MenuItem>
+					<MenuItem style={{ justifyContent: 'center', display: 'flex' }} 
+						onClick={() => this.setState({ state: State.debug})}>Debug</MenuItem>
 					<MenuItem style={{ justifyContent: 'center', display: 'flex' }}
 						onClick={() => this.CloseApp()}>Close</MenuItem>
 				</MenuList>
@@ -60,7 +64,7 @@ export class Menu extends React.Component<any, MenuState> {
 		]).then((response: any) => { 
 			if (response === true) {
 				// timed out
-				this.setState({ state: State.main});
+				this.setState({ state: State.main });
 			}
 		});
 	}
@@ -71,6 +75,8 @@ export class Menu extends React.Component<any, MenuState> {
 	  	} else if (this.state?.state === State.main) {
 		  	// Main menu
 			return this.Menu();
+		} else if (this.state?.state === State.debug) {
+			return <DebugScreen close={() => this.CloseApp()} />
 	  	} else {
 		  	// Closed
 			this.OpenMenuIfNoResponse();

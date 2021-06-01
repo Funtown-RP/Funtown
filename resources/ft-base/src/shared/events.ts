@@ -11,7 +11,8 @@ export enum Event {
 	openCharCustomization = "cui_character:open",
 	playerSpawned = "playerSpawned",
 	clientResourceStarted = "onClientResourceStart",
-	itemDefinitions = "ft-base:item-definitions"
+	itemDefinitions = "ft-base:item-definitions",
+	getItemDefinitions = "ft-base:get-item-definitions"
 }
 
 export default Event;

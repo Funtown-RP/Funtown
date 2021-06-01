@@ -108,6 +108,7 @@ export class CharSelect extends React.Component<CharSelectProps, CharSelectState
 		if (!this.state?.newCharacter) {
 			return <Container maxWidth="sm"  >
 				<Paper style={{padding: "32px", margin: "16px"}} >
+					<Typography variant="h2" component="h2" style={{ justifyContent: 'space-around', display: 'flex', marginBottom: "20px" }} >Character Select</Typography>
 					<Grid container direction="column" alignItems="stretch" spacing={2}>
 						{this.state?.characters?.map((char) => {
 							return <Grid item alignContent="stretch" style={{ margin: "8px" }}>
