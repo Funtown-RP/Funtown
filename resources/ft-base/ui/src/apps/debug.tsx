@@ -33,7 +33,7 @@ export class DebugScreen extends React.Component<DebugScreenProps, DebugScreenSt
 	}
 
 	itemDefs() {
-		return <TableContainer component={Card} >
+		return <TableContainer component={Card} style={{backgroundColor: "#333333"}} >
 			<Table>
 				<TableHead>
 					<TableRow>
@@ -61,9 +61,7 @@ export class DebugScreen extends React.Component<DebugScreenProps, DebugScreenSt
 		return <Container maxWidth="md" >
 			<Paper style={{padding: "32px", margin: "16px"}} >
 				<Button variant="contained" color="secondary" endIcon={<CloseIcon />} onClick={() => this.props.close()} >Close</Button>
-				<Tabs centered value={this.state.tab} style={{ marginBottom: "24px" }} onChange={(event: object, value: number) => {
-					this.setState({tab: value});
-				}}>
+				<Tabs centered value={this.state.tab} style={{ marginBottom: "24px" }} onChange={(event: object, value: number) => { this.setState({tab: value}); }}>
 					<Tab label="Item Definitions" />
 					<Tab label="Test" />
 				</Tabs>

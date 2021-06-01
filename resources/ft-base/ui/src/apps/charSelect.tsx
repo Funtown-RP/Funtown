@@ -72,7 +72,7 @@ export class CharSelect extends React.Component<CharSelectProps, CharSelectState
 			dobError: dobErr
 		});
 
-		return firstNameErr || lastNameErr || dobErr;
+		return !(firstNameErr || lastNameErr || dobErr);
 	}
 
 	newChar () {
