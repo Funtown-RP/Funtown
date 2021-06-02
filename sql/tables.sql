@@ -27,7 +27,37 @@ CREATE TABLE IF NOT EXISTS `characters` (
   `cash` int(11) NOT NULL DEFAULT 0,
   `bank` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=latin1;
+
+-- Data exporting was unselected.
+
+-- Dumping structure for table funtown.inventories
+CREATE TABLE IF NOT EXISTS `inventories` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL DEFAULT '',
+  `type` enum('Player','Storage') DEFAULT 'Storage',
+  `char_id` int(11) DEFAULT NULL,
+  `storage_key` varchar(255) DEFAULT '',
+  `contents` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`contents`)),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `char_id unique` (`char_id`),
+  KEY `storage_key key` (`storage_key`) USING BTREE,
+  CONSTRAINT `inventory-character` FOREIGN KEY (`char_id`) REFERENCES `characters` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=latin1;
+
+-- Data exporting was unselected.
+
+-- Dumping structure for table funtown.items
+CREATE TABLE IF NOT EXISTS `items` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `key` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `weight` tinyint(4) NOT NULL DEFAULT 0,
+  `max_stack` tinyint(4) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique item` (`key`),
+  KEY `item key` (`key`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 -- Data exporting was unselected.
 
@@ -40,7 +70,7 @@ CREATE TABLE IF NOT EXISTS `players` (
   `is_dev` bit(1) NOT NULL DEFAULT b'0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `discord` (`discord`)
-) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=141 DEFAULT CHARSET=latin1;
 
 -- Data exporting was unselected.
 
@@ -51,8 +81,8 @@ CREATE TABLE IF NOT EXISTS `player_skins` (
   `skin` longtext DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `identifier` (`char_id`) USING BTREE,
-  CONSTRAINT `Character` FOREIGN KEY (`char_id`) REFERENCES `characters` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
+  CONSTRAINT `skin-character` FOREIGN KEY (`char_id`) REFERENCES `characters` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
 
 -- Data exporting was unselected.
 

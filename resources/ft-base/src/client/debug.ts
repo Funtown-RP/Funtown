@@ -67,3 +67,7 @@ nui.onNui(NUIEvent.getItems, (): Array<item> => {
 	}
 	return allItems;
 });
+
+// RegisterCommand("giveitem", (src: string, args: string[]) => {
+// 	emitNet();
+// }, false);

@@ -4,6 +4,6 @@ setTick(() => {
 		EnableDispatchService(i, false);
 	}
 
-	// Turn off wanted level
+	// Turn off wanted level every frame
 	ClearPlayerWantedLevel(PlayerId());
 });
