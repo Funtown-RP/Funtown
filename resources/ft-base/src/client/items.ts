@@ -1,10 +1,10 @@
-import { item } from "../shared/interfaces";
-import Event from "../shared/events";
+import { IItem } from "../shared/interfaces";
+import FTEvent from "../shared/events";
 
-let items: Array<item> = [];
-let itemDict: Record<string, item> = {};
+let items: Array<IItem> = [];
+let itemDict: Record<string, IItem> = {};
 
-onNet(Event.itemDefinitions, (itemDefs: item[]) => {
+onNet(FTEvent.itemDefinitions, (itemDefs: IItem[]) => {
 	items = itemDefs;
 	itemDict = {};
 	for (const item of items) {
@@ -12,10 +12,10 @@ onNet(Event.itemDefinitions, (itemDefs: item[]) => {
 	}	
 });
 
-export function GetItem(key: string): item {
+export function GetItem(key: string): IItem {
 	return itemDict[key];
 }
 
-export function AllItems(): Array<item> {
+export function AllItems(): Array<IItem> {
 	return items;
 }

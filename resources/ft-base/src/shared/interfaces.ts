@@ -1,4 +1,4 @@
-export interface character {
+export interface ICharacter {
 	id: number;
 	player_discord: string;
 	first_name: string;
@@ -9,7 +9,7 @@ export interface character {
 	bank: number;
 }
 
-export interface player {
+export interface IPlayer {
 	id: number;
 	steam: string;
 	discord: string;
@@ -22,7 +22,7 @@ export enum InventoryType {
 	storage = "Storage"
 }
 
-export interface inventory {
+export interface IInventory {
 	id: number;
 	name: string;
 	type: InventoryType;
@@ -31,7 +31,7 @@ export interface inventory {
 	contents: string;
 }
 
-export interface item {
+export interface IItem {
 	id: number;
 	key: string;
 	name: string;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { TableRow, TableCell, Paper, TableContainer, Table, TableHead, TableBody, Container, Button, Card, Tabs, Tab, Typography } from '@material-ui/core';
 import { SendMessage } from "../lib/nui"
-import { item } from '../../../src/shared/interfaces';
+import { IItem } from '../../../src/shared/interfaces';
 import CloseIcon from '@material-ui/icons/Close';
 
 export interface DebugScreenProps {
@@ -10,7 +10,7 @@ export interface DebugScreenProps {
 
 export interface DebugScreenState {
 	tab: number;
-	items: item[];
+	items: IItem[];
 }
 
 export class DebugScreen extends React.Component<DebugScreenProps, DebugScreenState> {
@@ -44,7 +44,7 @@ export class DebugScreen extends React.Component<DebugScreenProps, DebugScreenSt
 					</TableRow>
 				</TableHead>
 				<TableBody>
-					{Array.isArray(this.state?.items) && this.state?.items?.map((item: item) => (
+					{Array.isArray(this.state?.items) && this.state?.items?.map((item: IItem) => (
 						<TableRow key={item.key}>
 							<TableCell>{item.key}</TableCell>
 							<TableCell>{item.name}</TableCell>

@@ -1,21 +1,21 @@
-import { inventory, item } from "../../shared/interfaces";
+import { IInventory, IItem } from "../../shared/interfaces";
 import { execute } from "./sql";
 
 export interface InventoryItem {
-	item: item;
+	item: IItem;
 	quantity: number;
 }
 
 export class Inventory {
 	contents: InventoryItem[];
-	invData: inventory;
+	invData: IInventory;
 
-	constructor(inventoryData: inventory) {
+	constructor(inventoryData: IInventory) {
 		this.invData = inventoryData;
 		this.contents = JSON.parse(inventoryData.contents);
 	}
 
-	addItem(item: item, quantity = 1): void {
+	addItem(item: IItem, quantity = 1): void {
 		let quantityToAdd = quantity;
 		for (let i = 0; i < this.contents.length; i++) {
 			const invItem = this.contents[i];

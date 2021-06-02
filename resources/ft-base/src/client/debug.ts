@@ -1,15 +1,15 @@
-import { currentChar, UpdateGamertag } from "./lib/char";
-import Event from "../shared/events";
+import { Character } from "./lib/character";
+import FTEvent from "../shared/events";
 import * as nui from "./lib/nuiLib";
 import NUIEvent from "./lib/nuiEvents";
 import { AllItems } from "./items";
-import { item } from "../shared/interfaces";
+import { IItem } from "../shared/interfaces";
 
 RegisterCommand(
 	"tpm",
 	() => {
 		TeleportToMarker();
-		emitNet(Event.tpm);
+		emitNet(FTEvent.tpm);
 	},
 	false
 );
@@ -50,19 +50,19 @@ RegisterCommand("debug", () => {
 }, false);
 
 RegisterCommand("char", () => {
-	const curChar = currentChar();
+	const curChar = Character.CurrentChar();
 	console.log(`[${curChar?.id}] ${curChar?.first_name} ${curChar?.last_name}`);
-	UpdateGamertag();
+	Character.UpdateGamertag();
 }, false);
 
 RegisterCommand("nuiq", () => {
 	nui.Unfocus();
 }, false);
 
-nui.onNui(NUIEvent.getItems, (): Array<item> => {
+nui.onNui(NUIEvent.getItems, (): Array<IItem> => {
 	const allItems = AllItems();
 	if (allItems.length === 0) {
-		emitNet(Event.getItemDefinitions);
+		emitNet(FTEvent.getItemDefinitions);
 		console.log("refresh again please");
 	}
 	return allItems;

@@ -1,4 +1,4 @@
-export enum Event {
+export enum FTEvent {
 	characterUpdated = "ft-base:characterUpdated",
 	selectedNewChar = "ft-base:selectNewChar", 
 	loadedCharacters = "ft-base:loadedCharacters",
@@ -15,4 +15,4 @@ export enum Event {
 	getItemDefinitions = "ft-base:get-item-definitions"
 }
 
-export default Event;
+export default FTEvent;

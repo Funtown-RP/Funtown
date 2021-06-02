@@ -1,14 +1,14 @@
 import * as ft from "./lib/ft";
 export * as ft from "./lib/ft";
 import * as sql from "./lib/sql";
-import { character } from "../shared/interfaces";
-import Event from "../shared/events";
+import { ICharacter } from "../shared/interfaces";
+import FTEvent from "../shared/events";
 
-onNet(Event.tpm, () => {
+onNet(FTEvent.tpm, () => {
 	console.log(`TPM by ${source}`);
 });
 
-onNet(Event.playerConnecting, () => {
+onNet(FTEvent.playerConnecting, () => {
 	insertOrUpdatePlayer(source);
 });
 
@@ -32,21 +32,21 @@ function insertOrUpdatePlayer (src: string) {
 	});
 }
 
-onNet(Event.serverLoadCharacters, () => {
+onNet(FTEvent.serverLoadCharacters, () => {
 	const src = source;
 	ft.characters.GetCharacters(ft.identifiers.GetPlayerIdentifiers(src).discord).then((chars) => {
-		emitNet(Event.loadedCharacters, src, chars);
+		emitNet(FTEvent.loadedCharacters, src, chars);
 	});
 });
 
-onNet(Event.serverCharSelected, (char: character) => {
+onNet(FTEvent.serverCharSelected, (char: ICharacter) => {
 	const src = source;
 	ft.characters.CharSelected(src, char);
 	ft.inventories.CreateInventoryIfNotExists(char);
 	console.log(`Client ${src} [${char.player_discord}] is now [${char.id}] ${char.first_name} ${char.last_name}.`);
 });
 
-onNet(Event.serverNewChar, (data) => {
+onNet(FTEvent.serverNewChar, (data) => {
 	const src = source;
 	const firstName = data.firstName || "First";
 	const lastName = data.lastName || "Last";
@@ -54,16 +54,16 @@ onNet(Event.serverNewChar, (data) => {
 	ft.characters.NewCharacter(src, ft.identifiers.GetPlayerIdentifiers(src).discord, firstName, lastName, dob);
 });
 
-onNet(Event.playerConnecting, () => {
+onNet(FTEvent.playerConnecting, () => {
 	const src = source;
-	emitNet(Event.itemDefinitions, src, ft.items.GetItems());
+	emitNet(FTEvent.itemDefinitions, src, ft.items.GetItems());
 });
 
 RegisterCommand("items", (src: string) => {
-	emitNet(Event.itemDefinitions, src, ft.items.GetItems());
+	emitNet(FTEvent.itemDefinitions, src, ft.items.GetItems());
 }, false);
 
-onNet(Event.getItemDefinitions, () => {
+onNet(FTEvent.getItemDefinitions, () => {
 	const src = source;
-	emitNet(Event.itemDefinitions, src, ft.items.GetItems());
+	emitNet(FTEvent.itemDefinitions, src, ft.items.GetItems());
 });

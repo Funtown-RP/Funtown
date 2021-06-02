@@ -1,16 +1,16 @@
-import { character } from "../shared/interfaces";
-import Event from "../shared/events";
-import { currentChar, UpdateGamertag, SelectChar} from "./lib/char";
+import { ICharacter } from "../shared/interfaces";
+import FTEvent from "../shared/events";
+import { Character } from "./lib/character";
 import * as nui from "./lib/nuiLib";
 
-on(Event.playerSpawned, () => {
-	if (!currentChar()) {
+on(FTEvent.playerSpawned, () => {
+	if (!Character.CurrentChar()) {
 		nui.SendMessage("charSelect", "open", {forceChoice: true });
 		nui.Focus();
 	}
 });
 
-on(Event.clientResourceStarted, (resourceName: string) => {
+on(FTEvent.clientResourceStarted, (resourceName: string) => {
 	if (resourceName === GetCurrentResourceName()) {
 		setTimeout(() => {
 			nui.SendMessage("charSelect", "open", { forceChoice: true });
@@ -19,15 +19,15 @@ on(Event.clientResourceStarted, (resourceName: string) => {
 	}
 });
 
-onNet(Event.selectedNewChar, (char: character) => {
-	SelectChar(char, true);
+onNet(FTEvent.selectedNewChar, (char: ICharacter) => {
+	Character.SelectChar(char, true);
 });
 
 onNet("cui_character:recievePlayerData", () => {
-	UpdateGamertag();
+	Character.UpdateGamertag();
 });
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-onNet(Event.loadedCharacters, (characters: any) => {
+onNet(FTEvent.loadedCharacters, (characters: any) => {
 	nui.SendMessage("charSelect", "characters", { characters: characters });
 });

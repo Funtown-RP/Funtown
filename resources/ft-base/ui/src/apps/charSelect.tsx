@@ -3,13 +3,13 @@ import { Button, Card, CardActions, CardContent, Container, Grid, Paper, TextFie
 import CloseIcon from '@material-ui/icons/Close';
 import AddIcon from '@material-ui/icons/Add'
 import CheckIcon from '@material-ui/icons/Check'
-import { character } from '../../../src/shared/interfaces';
+import { ICharacter } from '../../../src/shared/interfaces';
 import { SendMessage } from '../lib/nui';
 
 const appName = "charselect";
 
 interface CharSelectState {
-	characters: character[];
+	characters: ICharacter[];
 	newCharacter: boolean;
 	firstNameError: boolean;
 	lastNameError: boolean;
@@ -41,9 +41,16 @@ export class CharSelect extends React.Component<CharSelectProps, CharSelectState
 			}
 		});
 		SendMessage(appName, 'getCharacters')
+
+		this.selectChar = this.selectChar.bind(this);
+		this.startNewChar = this.startNewChar.bind(this);
+		this.isNewCharValid = this.isNewCharValid.bind(this);
+		this.newChar = this.newChar.bind(this);
+		this.CharSelectCard = this.CharSelectCard.bind(this);
 	}
 
-	selectChar (char: character) {
+	selectChar (char: ICharacter) {
+		console.log("nui is selecting char");
 		SendMessage(appName, 'selectChar', char);
 		this.props.close();
 	}
@@ -84,7 +91,7 @@ export class CharSelect extends React.Component<CharSelectProps, CharSelectState
 	}
 
 	CharSelectCard(props: any) {
-		const char: character = props.char
+		const char: ICharacter = props.char
 		return <Card variant="outlined" >
 			<CardContent>
 				<Typography variant="h5" component="h2">{char.first_name} {char.last_name}</Typography>
@@ -99,7 +106,7 @@ export class CharSelect extends React.Component<CharSelectProps, CharSelectState
 				</Typography>}
 			</CardContent>
 			<CardActions>
-				<Button color="primary" size="medium" startIcon={<CheckIcon />} onClick={() => props.onSelect(char)} >Log in</Button>
+				<Button color="primary" size="medium" startIcon={<CheckIcon />} onClick={() => this.selectChar(char)} >Log in</Button>
 			</CardActions>
 		</Card>;
 	}
@@ -112,7 +119,7 @@ export class CharSelect extends React.Component<CharSelectProps, CharSelectState
 					<Grid container direction="column" alignItems="stretch" spacing={2}>
 						{this.state?.characters?.map((char) => {
 							return <Grid item alignContent="stretch" style={{ margin: "8px" }}>
-								<this.CharSelectCard char={char} onSelect={(char: character) => this.selectChar(char)} />
+								<this.CharSelectCard char={char} />
 							</Grid>
 						})}
 						<Grid item sm style={{ justifyContent: 'space-around', display: 'flex' }}>
