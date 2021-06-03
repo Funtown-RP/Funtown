@@ -68,6 +68,11 @@ nui.onNui(NUIEvent.getItems, (): Array<IItem> => {
 	return allItems;
 });
 
-// RegisterCommand("giveitem", (src: string, args: string[]) => {
-// 	emitNet();
-// }, false);
+RegisterCommand("inv", () => {
+	emitNet(FTEvent.getInventory);
+}, false);
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+onNet(FTEvent.inventoryData, (inventory: any) => {
+	console.log(JSON.stringify(inventory));
+});

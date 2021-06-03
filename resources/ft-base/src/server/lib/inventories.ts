@@ -6,14 +6,14 @@ export class Inventories {
 	static playerInventories = new Cache<IInventory>("inventories", "char_id");
 	static playerInventoryContents: ICache<Inventory> = {};
 
-	static async GetInventory(charId: number): Promise<Inventory> {
-		if (!this.playerInventoryContents[charId.toString()]) {
-			const invData = await this.playerInventories.Get(charId.toString());
+	static async GetInventory(char: ICharacter): Promise<Inventory> {
+		if (!this.playerInventoryContents[char.id.toString()]) {
+			const invData = await this.playerInventories.Get(char.id.toString());
 			const inv = new Inventory(invData);
-			this.playerInventoryContents[charId] = inv;
+			this.playerInventoryContents[char.id] = inv;
 			return inv;
 		} else {
-			return this.playerInventoryContents[charId.toString()];
+			return this.playerInventoryContents[char.id.toString()];
 		}
 	}
 	

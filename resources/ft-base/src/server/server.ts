@@ -24,7 +24,7 @@ RegisterCommand("additem", (src: string, args: string[]) => {
 	ft.Players.GetPlayerSrc(src).then((player) => {
 		if (player.is_admin || player.is_dev) {
 			const char = ft.Characters.GetCurrentCharacter(src);
-			ft.Inventories.GetInventory(char.id).then((inv: ft.Inventory) => {
+			ft.Inventories.GetInventory(char).then((inv: ft.Inventory) => {
 				inv.AddItem(ft.Items.GetItem(itemkey), amount);
 			});
 		}
@@ -65,4 +65,12 @@ RegisterCommand("items", (src: string) => {
 onNet(FTEvent.getItemDefinitions, () => {
 	const src = source;
 	emitNet(FTEvent.itemDefinitions, src, ft.Items.GetItems());
+});
+
+onNet(FTEvent.getInventory, async () => {
+	const src = source;
+	const curChar = ft.Characters.GetCurrentCharacter(src);
+	ft.Inventories.GetInventory(curChar).then((inv) => {
+		emitNet(FTEvent.inventoryData, src, inv);
+	});
 });
