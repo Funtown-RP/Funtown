@@ -11,29 +11,29 @@ onNet(FTEvent.playerConnecting, () => {
 	insertOrUpdatePlayer(source);
 });
 
+function insertOrUpdatePlayer (src: string) {
+	const identifiers = ft.GetPlayerIdentifiers(src);
+	sql.execute("INSERT INTO `players` (`steam`,`discord`) VALUES (?, ?) ON DUPLICATE KEY UPDATE `steam` = ?", [identifiers.steam, identifiers.discord, identifiers.steam], () => {
+		ft.Players.PlayerChanged(identifiers.discord);
+	});
+}
+
 RegisterCommand("additem", (src: string, args: string[]) => {
 	const itemkey = args[0];
 	const amount = parseInt(args[1]) || 1;
 	ft.Players.GetPlayerSrc(src).then((player) => {
 		if (player.is_admin || player.is_dev) {
 			const char = ft.Characters.GetCurrentCharacter(src);
-			ft.Inventories.getInventory(char.id).then((inv: ft.Inventory) => {
-				inv.addItem(ft.Items.GetItem(itemkey), amount);
+			ft.Inventories.GetInventory(char.id).then((inv: ft.Inventory) => {
+				inv.AddItem(ft.Items.GetItem(itemkey), amount);
 			});
 		}
 	});
 }, false);
 
-function insertOrUpdatePlayer (src: string) {
-	const identifiers = ft.identifiers.GetPlayerIdentifiers(src);
-	sql.execute("INSERT INTO `players` (`steam`,`discord`) VALUES (?, ?) ON DUPLICATE KEY UPDATE `steam` = ?", [identifiers.steam, identifiers.discord, identifiers.steam], () => {
-		ft.Players.PlayerChanged(identifiers.discord);
-	});
-}
-
 onNet(FTEvent.serverLoadCharacters, () => {
 	const src = source;
-	ft.Characters.GetCharacters(ft.identifiers.GetPlayerIdentifiers(src).discord).then((chars) => {
+	ft.Characters.GetCharacters(ft.GetPlayerIdentifiers(src).discord).then((chars) => {
 		emitNet(FTEvent.loadedCharacters, src, chars);
 	});
 });
@@ -50,7 +50,7 @@ onNet(FTEvent.serverNewChar, (data) => {
 	const firstName = data.firstName || "First";
 	const lastName = data.lastName || "Last";
 	const dob = new Date(data.dob);
-	ft.Characters.NewCharacter(src, ft.identifiers.GetPlayerIdentifiers(src).discord, firstName, lastName, dob);
+	ft.Characters.NewCharacter(src, ft.GetPlayerIdentifiers(src).discord, firstName, lastName, dob);
 });
 
 onNet(FTEvent.playerConnecting, () => {

@@ -1,9 +1,9 @@
-export interface identifiers {
+export interface IIdentifiers {
 	steam: string;
 	discord: string;
 }
 
-export function GetPlayerIdentifiers(src: string): identifiers {
+export function GetPlayerIdentifiers(src: string): IIdentifiers {
 	let discord = "";
 	let steam = "";
 

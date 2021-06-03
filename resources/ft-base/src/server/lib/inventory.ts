@@ -1,13 +1,13 @@
 import { IInventory, IItem } from "../../shared/interfaces";
 import { execute } from "./sql";
 
-export interface InventoryItem {
+export interface IInventoryItem {
 	item: IItem;
 	quantity: number;
 }
 
 export class Inventory {
-	contents: InventoryItem[];
+	contents: IInventoryItem[];
 	invData: IInventory;
 
 	constructor(inventoryData: IInventory) {
@@ -15,7 +15,7 @@ export class Inventory {
 		this.contents = JSON.parse(inventoryData.contents);
 	}
 
-	addItem(item: IItem, quantity = 1): void {
+	AddItem(item: IItem, quantity = 1): void {
 		let quantityToAdd = quantity;
 		for (let i = 0; i < this.contents.length; i++) {
 			const invItem = this.contents[i];
@@ -35,10 +35,10 @@ export class Inventory {
 		if (quantityToAdd > 0) {
 			this.contents.push({ item: item, quantity: quantityToAdd});
 		}
-		this.save();
+		this.Save();
 	}
 
-	itemCount(itemkey: string): number {
+	ItemCount(itemkey: string): number {
 		let count = 0;
 		for (let i = 0; i < this.contents.length; i++) {
 			const invItem = this.contents[i];
@@ -49,7 +49,7 @@ export class Inventory {
 		return count;
 	}
 
-	removeItem(itemkey: string, quantity = 1): boolean {
+	RemoveItem(itemkey: string, quantity = 1): boolean {
 		let quantityToRemove = quantity;
 		for (let i = 0; i < this.contents.length; i++) {
 			const invItem = this.contents[i];
@@ -57,7 +57,7 @@ export class Inventory {
 				if (invItem.quantity > quantityToRemove) {
 					// Have extra in this stack, remove from stack and quit
 					this.contents[i] = { item: invItem.item, quantity: invItem.quantity - quantityToRemove};
-					this.save();
+					this.Save();
 					return true;
 				} else {
 					// Have exactly enough in stack or not enough, remove from stack and keep going through loop if there's any left
@@ -65,7 +65,7 @@ export class Inventory {
 					quantityToRemove = quantityToRemove - invItem.quantity;
 				}
 				if (quantityToRemove <= 0) {
-					this.save();
+					this.Save();
 					return true;
 				}
 			}
@@ -73,10 +73,10 @@ export class Inventory {
 		if (quantityToRemove > 0) {
 			return false;
 		}
-		this.save();
+		this.Save();
 	}
 
-	save(): void {
+	Save(): void {
 		execute("UPDATE inventories SET contents = ? WHERE id = ?", [JSON.stringify(this.contents), this.invData.id]);
 	}
 }

@@ -13,11 +13,11 @@ export class Players {
 	}
 	
 	static async GetPlayer(discord: string): Promise<IPlayer> {
-		return this.players.get(discord);
+		return this.players.Get(discord);
 	}
 	
 	static PlayerChanged(discord: string): void {
-		this.players.changed(discord);
+		this.players.Changed(discord);
 	}
 }
 

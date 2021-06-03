@@ -12,11 +12,11 @@ export class Characters {
 	}
 	
 	static async GetCharacters(discord: string): Promise<ICharacter[]> {
-		return await this.charactersDiscord.get(discord);
+		return await this.charactersDiscord.Get(discord);
 	}
 	
 	static async GetCharacter(characterID: string | number): Promise<ICharacter> {
-		return await this.charactersId.get(characterID.toString());
+		return await this.charactersId.Get(characterID.toString());
 	}
 	
 	static GetCurrentCharacter(src: string): ICharacter {
@@ -36,9 +36,9 @@ export class Characters {
 	 * Mark a character as having changed
 	 */
 	static async CharacterChanged(discord: string): Promise<void> {
-		const characters = await this.charactersDiscord.get(discord);
+		const characters = await this.charactersDiscord.Get(discord);
 		for (const character of characters) {
-			this.charactersId.changed(character.id.toString());
+			this.charactersId.Changed(character.id.toString());
 	
 			const src = this.GetCharacterSrc(character);
 			const curChar = this.GetCurrentCharacter(src);
@@ -51,9 +51,9 @@ export class Characters {
 	}
 	
 	static async NewCharacter(src: string, discord: string, firstName: string, lastName: string, dob: Date): Promise<void> {
-		this.charactersDiscord.changed(discord);
+		this.charactersDiscord.Changed(discord);
 		execute("INSERT INTO characters (player_discord, first_name, last_name, dob) VALUES (?, ?, ?, ?)", [discord, firstName, lastName, dob.toISOString().slice(0, 19).replace("T", " ")], async (result) => {
-			this.charactersDiscord.changed(discord);
+			this.charactersDiscord.Changed(discord);
 			const newChar = await this.GetCharacter(result.insertId);
 			emitNet(FTEvent.selectedNewChar, src, newChar);
 		});

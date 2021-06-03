@@ -5,10 +5,10 @@ export class Items {
 	static items = new TableCache<IItem>("items");
 	static itemDict: Record<string, IItem> = {};
 	
-	static tryBuildDict(): void {
+	private static tryBuildDict(): void {
 		if (this.items.isLoaded) {
 			this.itemDict = {};
-			const rows = this.items.rows();
+			const rows = this.items.Rows();
 			for (const item of rows) {
 				this.itemDict[item.key] = item;
 			}	
@@ -18,11 +18,11 @@ export class Items {
 	}
 		
 	static GetItems(): Array<IItem> {
-		if (this.items.rows().length === 0) {
-			this.items.refresh().then(this.tryBuildDict);
+		if (this.items.Rows().length === 0) {
+			this.items.Refresh().then(this.tryBuildDict);
 			console.error("uh oh, no items found");
 		}
-		return this.items.rows();
+		return this.items.Rows();
 	}
 	
 	static GetItem(itemKey: string): IItem {

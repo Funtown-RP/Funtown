@@ -49,7 +49,7 @@ function isEmpty (obj: any) {
 // How to use:
 // 	const yourCache = new Cache<yourInterface>("table", "keyColumn"); <-- yourInterface is an interface that matches the columns of the database
 // 	const row = await yourCache.get(value);  <-- put this in an async function
-// 	you can also do: yourCache.get(value).then(...)
+// 	you can also do: yourCache.get(value).then((value) => {...})
 //
 // If a row is changed:
 //	You need to clear out the row in the cache so we get it from the database again
@@ -65,7 +65,7 @@ export class Cache<T> {
 		this.query = `SELECT * FROM ${table} WHERE ${keyColumn} = ?`;
 	}
 
-	async get(key: string): Promise<T> {
+	async Get(key: string): Promise<T> {
 		if (!this.cache[key]) {
 			const value = await executeSync(this.query, [key]);
 			if (!isEmpty(value) && !Array.isArray(value)) {
@@ -77,7 +77,7 @@ export class Cache<T> {
 		return this.cache[key];
 	}
 
-	async getMultiple(key: string): Promise<T[]> {
+	async GetMultiple(key: string): Promise<T[]> {
 		if (!this.cache[key]) {
 			const value = await executeSync(this.query, [key]);
 			if (Array.isArray(value)) {
@@ -87,7 +87,7 @@ export class Cache<T> {
 		return this.multipleCache[key];
 	}
 
-	changed (key: string): void {
+	Changed (key: string): void {
 		delete this.cache[key];
 	}
 }
@@ -101,7 +101,7 @@ export class ArrayCache<T> {
 		this.query = `SELECT * FROM ${table} WHERE ${keyColumn} = ?`;
 	}
 
-	async get(key: string): Promise<T[]> {
+	async Get(key: string): Promise<T[]> {
 		if (!this.cache[key]) {
 			const value = await executeSync(this.query, [key]);
 			if (!isEmpty(value)) {
@@ -111,7 +111,7 @@ export class ArrayCache<T> {
 		return this.cache[key];
 	}
 
-	changed (key: string): void {
+	Changed (key: string): void {
 		delete this.cache[key];
 	}
 }
@@ -127,13 +127,13 @@ export class TableCache<T> {
 		this.load();
 	}
 
-	rows(): Array<T> {
+	Rows(): Array<T> {
 		return this.cache;
 	}
 
-	getRows = this.rows;
+	GetRows = this.Rows;
 
-	async refresh(): Promise<void> {
+	async Refresh(): Promise<void> {
 		return this.load();
 	}
 
