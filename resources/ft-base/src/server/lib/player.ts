@@ -2,19 +2,24 @@ import { Cache } from "../lib/sql";
 import { GetPlayerIdentifiers } from "../lib/identifiers";
 import { IPlayer } from "../../shared/interfaces";
 
-const players = new Cache<IPlayer>("players", "discord");
+export class Players {
+	static players = new Cache<IPlayer>("players", "discord");
 
-export async function GetPlayerSrc(src: string): Promise<IPlayer> {
-	const discord = GetPlayerIdentifiers(src).discord;
-	if (discord.length > 0) {
-		return GetPlayer(discord);
+	static async GetPlayerSrc(src: string): Promise<IPlayer> {
+		const discord = GetPlayerIdentifiers(src).discord;
+		if (discord.length > 0) {
+			return this.GetPlayer(discord);
+		}
+	}
+	
+	static async GetPlayer(discord: string): Promise<IPlayer> {
+		return this.players.get(discord);
+	}
+	
+	static PlayerChanged(discord: string): void {
+		this.players.changed(discord);
 	}
 }
 
-export async function GetPlayer(discord: string): Promise<IPlayer> {
-	return players.get(discord);
-}
 
-export function PlayerChanged(discord: string): void {
-	players.changed(discord);
-}
+

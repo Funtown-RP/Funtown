@@ -50,7 +50,6 @@ export class CharSelect extends React.Component<CharSelectProps, CharSelectState
 	}
 
 	selectChar (char: ICharacter) {
-		console.log("nui is selecting char");
 		SendMessage(appName, 'selectChar', char);
 		this.props.close();
 	}

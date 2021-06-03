@@ -1,36 +1,38 @@
 import { TableCache } from "../lib/sql";
 import { IItem } from "../../shared/interfaces";
 
-const items = new TableCache<IItem>("items");
-let itemDict: Record<string, IItem> = {};
-
-function tryBuildDict() {
-	if (items.isLoaded) {
-		itemDict = {};
-		const rows = items.rows();
-		for (const item of rows) {
-			itemDict[item.key] = item;
-		}	
-	} else {
-		setTimeout(tryBuildDict, 100);
+export class Items {
+	static items = new TableCache<IItem>("items");
+	static itemDict: Record<string, IItem> = {};
+	
+	static tryBuildDict(): void {
+		if (this.items.isLoaded) {
+			this.itemDict = {};
+			const rows = this.items.rows();
+			for (const item of rows) {
+				this.itemDict[item.key] = item;
+			}	
+		} else {
+			setTimeout(this.tryBuildDict, 100);
+		}
 	}
+		
+	static GetItems(): Array<IItem> {
+		if (this.items.rows().length === 0) {
+			this.items.refresh().then(this.tryBuildDict);
+			console.error("uh oh, no items found");
+		}
+		return this.items.rows();
+	}
+	
+	static GetItem(itemKey: string): IItem {
+		if (!this.itemDict) {
+			console.error("Tried to get an item but the item definition dictionary is empty");
+			this.tryBuildDict();
+		}
+		return this.itemDict[itemKey];
+	}
+	
 }
 
-setTimeout(tryBuildDict, 100);
-
-export function GetItems(): Array<IItem> {
-	if (items.rows().length === 0) {
-		items.refresh().then(tryBuildDict);
-		console.error("uh oh, no items found");
-	}
-	return items.rows();
-}
-
-export function GetItem(itemKey: string): IItem {
-	if (!itemDict) {
-		console.error("Tried to get an item but the item definition dictionary is empty");
-		tryBuildDict();
-	}
-	return itemDict[itemKey];
-}
 

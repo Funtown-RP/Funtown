@@ -20,7 +20,3 @@ export function GetPlayerIdentifiers(src: string): identifiers {
 	}
 	return { discord: discord, steam: steam };
 }
-
-export enum webapp {
-	charSelect = "charSelect",
-}

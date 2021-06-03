@@ -1,6 +1,8 @@
 import { ICharacter } from "../../shared/interfaces";
 import FTEvent from "../../shared/events";
 import { AllItems } from "../items";
+import * as nui from "./nuiLib";
+import NUIEvent from "./nuiEvents";
 
 export class Character {
 	static currentCharacter: ICharacter = undefined;
@@ -45,3 +47,19 @@ export class Character {
 		}, 2500);
 	}
 }
+
+onNet(FTEvent.characterUpdated, (char: ICharacter) => {
+	const curChar = Character.CurrentChar();
+	if (!curChar || curChar.id === char.id) {
+		Character.SetCurrentChar(char);
+		console.log(`char updated: ${JSON.stringify(Character.CurrentChar)}`);
+	}
+});
+
+global.exports("CurrentChar", () => {
+	return Character.currentCharacter;
+});
+
+nui.onNui(NUIEvent.selectChar, (data) => {
+	Character.SelectChar(data as ICharacter, false);
+});

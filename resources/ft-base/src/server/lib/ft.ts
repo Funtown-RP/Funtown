@@ -1,8 +1,6 @@
-import { Characters } from "./character";
-export * as players from "./player";
+export * from "./character";
+export * from "./player";
 export * as identifiers from "./identifiers";
-export * as inventories from "./inventories";
-export * as inventory from "./inventory";
-export * as items from "./items";
-
-export const characters = new Characters();
+export * from "./inventories";
+export * from "./inventory";
+export * from "./items";
