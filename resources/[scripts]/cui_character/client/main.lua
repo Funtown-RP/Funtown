@@ -341,7 +341,7 @@ AddEventHandler('cui_character:close', function(save)
         for k, v in pairs(oldChar) do
             oldChar[k] = currentChar[k]
         end
-        TriggerServerEvent('cui_character:save', exports['ft-base'].currentChar(), currentChar)
+        TriggerServerEvent('cui_character:save', exports['ft-base'].CurrentChar(), currentChar)
     else
         LoadCharacter(oldChar)
     end
@@ -509,7 +509,7 @@ end)
 AddEventHandler('cui_character:updateClothes', function(data, save, updateOld, callback)
     UpdateClothes(data, updateOld)
     if save then
-        TriggerServerEvent('cui_character:save', exports['ft-base'].currentChar(), currentChar)
+        TriggerServerEvent('cui_character:save', exports['ft-base'].CurrentChar(), currentChar)
     end
     if callback then
         callback()
