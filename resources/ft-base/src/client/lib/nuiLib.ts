@@ -4,6 +4,7 @@ import NUIEvent from "./nuiEvents";
 export enum App {
 	menu = "main",
 	charSelect = "charSelect",
+	inventory = "inventory"
 }
 
 export function onNui(nuiEvent: NUIEvent, handler: (data: any) => any): void {

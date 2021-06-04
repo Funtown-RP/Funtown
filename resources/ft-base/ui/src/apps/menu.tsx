@@ -34,6 +34,8 @@ export class Menu extends React.Component<any, MenuState> {
 					this.setState({ state: State.main});
 				} else if (event.data.app === 'charSelect') {
 					this.setState({ state: State.charSelect, forceChoice: !!event.data.forceChoice });
+				} else if (event.data.app === "inventory") {
+					this.setState({ state: State.inventory});
 				}
 			}
 		});
