@@ -25,7 +25,9 @@ RegisterCommand("additem", (src: string, args: string[]) => {
 		if (player.is_admin || player.is_dev) {
 			const char = ft.Characters.GetCurrentCharacter(src);
 			ft.Inventories.GetInventory(char).then((inv: ft.Inventory) => {
-				inv.AddItem(ft.Items.GetItem(itemkey), amount);
+				ft.Items.GetItem(itemkey).then((item) => {
+					inv.AddItem(item, amount); //.then(() => ft.Inventories.InventoryChanged(char));
+				});
 			});
 		}
 	});

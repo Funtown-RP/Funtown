@@ -18,3 +18,11 @@ nui.onNui(NUIEvent.test, () => {
 	// Keep this here!
 	// It's used to determine if the UI can find a GTA client.
 });
+
+nui.onNui(NUIEvent.getInventory, () => {
+	emitNet(FTEvent.getInventory);
+});
+
+onNet(FTEvent.inventoryData, (inventory: never) => {
+	nui.SendMessage("inventory", "data", {inventory: inventory});
+});

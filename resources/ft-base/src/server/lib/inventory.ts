@@ -1,12 +1,7 @@
-import { IInventory, IItem } from "../../shared/interfaces";
+import { IInventory, IInventoryItem, IItem, IInventoryData } from "../../shared/interfaces";
 import { execute } from "./sql";
 
-export interface IInventoryItem {
-	item: IItem;
-	quantity: number;
-}
-
-export class Inventory {
+export class Inventory implements IInventoryData {
 	contents: IInventoryItem[];
 	invData: IInventory;
 
@@ -15,14 +10,18 @@ export class Inventory {
 		this.contents = JSON.parse(inventoryData.contents);
 	}
 
-	AddItem(item: IItem, quantity = 1): void {
+	async AddItem(item: IItem, quantity = 1): Promise<void> {
 		let quantityToAdd = quantity;
 		for (let i = 0; i < this.contents.length; i++) {
 			const invItem = this.contents[i];
+			if (!invItem?.item?.key) {
+				continue;
+			}
 			if (invItem.item.key === item.key && invItem.quantity < invItem.item.max_stack) {
 				if (invItem.quantity + quantityToAdd <= item.max_stack) {
 					// Can all fit into this item
 					this.contents[i] = { item: item, quantity: invItem.quantity + quantityToAdd };
+					quantityToAdd = 0;
 					break;
 				} else {
 					// Cannot all fit into this item
@@ -36,6 +35,7 @@ export class Inventory {
 			this.contents.push({ item: item, quantity: quantityToAdd});
 		}
 		this.Save();
+		return;
 	}
 
 	ItemCount(itemkey: string): number {

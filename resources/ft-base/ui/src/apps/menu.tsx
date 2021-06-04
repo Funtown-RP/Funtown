@@ -3,12 +3,14 @@ import React from "react";
 import { CharSelect } from "./charSelect";
 import { SendMessage } from "../lib/nui";
 import { DebugScreen } from "./debug";
+import { Inventory } from "./inventory";
 
 enum State {
 	closed,
 	main,
 	charSelect,
-	debug
+	debug,
+	inventory
 }
 
 interface MenuState {
@@ -41,6 +43,8 @@ export class Menu extends React.Component<any, MenuState> {
 		return <Container style={{width: 'auto'}} >
 			<Paper style={{padding: "12px", margin: "16px"}}>
 				<MenuList  >
+				<MenuItem style={{ justifyContent: 'center', display: 'flex' }} 
+						onClick={() => this.setState({ state: State.inventory })}>Inventory</MenuItem>
 					<MenuItem style={{ justifyContent: 'center', display: 'flex' }} 
 						onClick={() => this.setState({ state: State.charSelect, forceChoice: false})}>Character Select</MenuItem>
 					<MenuItem style={{ justifyContent: 'center', display: 'flex' }} 
@@ -77,6 +81,8 @@ export class Menu extends React.Component<any, MenuState> {
 		switch (this.state?.state) {
 			case State.charSelect:
 				return <CharSelect close={() => this.CloseApp()} forceChoice={!!this.state.forceChoice} />;
+			case State.inventory:
+				return <Inventory close={() => this.CloseApp()} />;
 			case State.main:
 				return <this.Menu />;
 			case State.debug:

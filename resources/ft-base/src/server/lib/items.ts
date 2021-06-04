@@ -5,15 +5,15 @@ export class Items {
 	static items = new TableCache<IItem>("items");
 	static itemDict: Record<string, IItem> = {};
 	
-	private static tryBuildDict(): void {
-		if (this.items.isLoaded) {
-			this.itemDict = {};
-			const rows = this.items.Rows();
-			for (const item of rows) {
-				this.itemDict[item.key] = item;
-			}	
-		} else {
-			setTimeout(this.tryBuildDict, 100);
+	private static async tryBuildDict(): Promise<void> {
+		if (this.items.Rows().length === 0) {
+			await this.items.Refresh();
+		}
+		this.itemDict = {};
+		const rows = this.items.Rows();
+		for (const item of rows) {
+			
+			this.itemDict[item.key] = item;
 		}
 	}
 		
@@ -25,10 +25,10 @@ export class Items {
 		return this.items.Rows();
 	}
 	
-	static GetItem(itemKey: string): IItem {
-		if (!this.itemDict) {
-			console.error("Tried to get an item but the item definition dictionary is empty");
-			this.tryBuildDict();
+	static async GetItem(itemKey: string): Promise<IItem> {
+		if (this.items.Rows().length === 0 ||  Object.keys(this.itemDict).length === 0) {
+			await this.items.Refresh();
+			await this.tryBuildDict();
 		}
 		return this.itemDict[itemKey];
 	}

@@ -38,3 +38,13 @@ export interface IItem {
 	weight: number;
 	max_stack: number;
 }
+
+export interface IInventoryItem {
+	item: IItem;
+	quantity: number;
+}
+
+export interface IInventoryData {
+	contents: IInventoryItem[];
+	invData: IInventory;
+}
