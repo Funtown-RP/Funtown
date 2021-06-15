@@ -32,20 +32,20 @@ export class Inventory implements IInventoryData {
 	async AddItem(item: IItem, quantity = 1): Promise<void> {
 		let quantityToAdd = quantity;
 		for (let i = 0; i < this.contents.length; i++) {
-			const invItem = this.contents[i];
-			if (!invItem?.item?.key) {
+			const invSlot = this.contents[i];
+			if (!invSlot?.item?.key) {
 				continue;
 			}
-			if (invItem.item.key === item.key && invItem.quantity < invItem.item.max_stack) {
-				if (invItem.quantity + quantityToAdd <= item.max_stack) {
-					// Can all fit into this item
-					this.contents[i] = { item: item, quantity: invItem.quantity + quantityToAdd };
+			if (invSlot.item.key === item.key && invSlot.quantity < invSlot.item.max_stack) {
+				if (invSlot.quantity + quantityToAdd <= item.max_stack) {
+					// Can all fit into this slot
+					this.contents[i] = { item: item, quantity: invSlot.quantity + quantityToAdd };
 					quantityToAdd = 0;
 					break;
 				} else {
-					// Cannot all fit into this item
-					const numToAdd = item.max_stack - invItem.quantity;
-					this.contents[i] = { item: item, quantity: invItem.quantity + numToAdd};
+					// Cannot all fit into this slot
+					const numToAdd = item.max_stack - invSlot.quantity;
+					this.contents[i] = { item: item, quantity: invSlot.quantity + numToAdd};
 					quantityToAdd = quantityToAdd - numToAdd;
 				}
 			}
