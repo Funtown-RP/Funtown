@@ -41,6 +41,7 @@ export class DebugScreen extends React.Component<DebugScreenProps, DebugScreenSt
 					<TableCell>Name</TableCell>
 					<TableCell>Weight</TableCell>
 					<TableCell>Max Stack</TableCell>
+					<TableCell>Usable</TableCell>
 					</TableRow>
 				</TableHead>
 				<TableBody>
@@ -50,6 +51,7 @@ export class DebugScreen extends React.Component<DebugScreenProps, DebugScreenSt
 							<TableCell>{item.name}</TableCell>
 							<TableCell>{item.weight}</TableCell>
 							<TableCell>{item.max_stack}</TableCell>
+							<TableCell>{item.usable ? "Yes" : "No"}</TableCell>
 						</TableRow>
 					))}
 				</TableBody>

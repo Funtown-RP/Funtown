@@ -1,13 +1,32 @@
-import { IInventory, IInventoryItem, IItem, IInventoryData } from "../../shared/interfaces";
+import { IInventory, IInventorySlot, IItem, IInventoryData } from "../../shared/interfaces";
 import { execute } from "./sql";
+import { Items } from "./items";
 
 export class Inventory implements IInventoryData {
-	contents: IInventoryItem[];
+	contents: IInventorySlot[];
 	invData: IInventory;
 
 	constructor(inventoryData: IInventory) {
 		this.invData = inventoryData;
 		this.contents = JSON.parse(inventoryData.contents);
+		this.UpdateItemDefs().then((shouldSave: boolean) => {
+			if (shouldSave) {
+				this.Save();
+			}
+		});
+	}
+
+	async UpdateItemDefs(): Promise<boolean> {
+		let changed = false;
+		for (let i = 0; i < this.contents.length; i++) {
+			await Items.GetItem(this.contents[i].item.key).then((itemDef) => {
+				if (this.contents[i].item !== itemDef) {
+					this.contents[i].item = itemDef;
+					changed = true;
+				}
+			});
+		}
+		return changed;
 	}
 
 	async AddItem(item: IItem, quantity = 1): Promise<void> {

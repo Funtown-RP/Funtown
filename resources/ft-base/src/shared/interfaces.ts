@@ -37,14 +37,15 @@ export interface IItem {
 	name: string;
 	weight: number;
 	max_stack: number;
+	usable: boolean;
 }
 
-export interface IInventoryItem {
+export interface IInventorySlot {
 	item: IItem;
 	quantity: number;
 }
 
 export interface IInventoryData {
-	contents: IInventoryItem[];
+	contents: IInventorySlot[];
 	invData: IInventory;
 }

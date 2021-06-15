@@ -1,4 +1,4 @@
-import { ICharacter, IInventory, IInventoryItem } from "../../shared/interfaces";
+import { ICharacter, IInventory, IInventorySlot } from "../../shared/interfaces";
 import { Inventory } from "./inventory";
 import { Cache, ICache, execute } from "./sql";
 
@@ -21,7 +21,7 @@ export class Inventories {
 	}
 	
 	static CreateInventoryIfNotExists(char: ICharacter): void {
-		const emptyInv: IInventoryItem[] = [];
+		const emptyInv: IInventorySlot[] = [];
 		execute("INSERT IGNORE INTO inventories (name, type, char_id, contents) VALUES (?, 'Player', ?, ?)", [`Char ${char.id}'s inventory`, char.id, JSON.stringify(emptyInv)]);
 	}
 

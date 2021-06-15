@@ -5,7 +5,9 @@ enum NUIEvent {
 	newChar = "charselect:newChar",
 	test = "debug:test",
 	getItems = "debug:items",
-	getInventory = "inventory:get"
+	getInventory = "inventory:get",
+	useItem = "inventory:use",
+	dropItem = "inventory:drop"
 }
 
 export default NUIEvent;
