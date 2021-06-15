@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS `items` (
   `name` varchar(255) NOT NULL,
   `weight` tinyint(4) NOT NULL DEFAULT 0,
   `max_stack` tinyint(4) NOT NULL DEFAULT 1,
+  `usable` bit(1) NOT NULL DEFAULT b'1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique item` (`key`),
   KEY `item key` (`key`)
@@ -30,11 +31,11 @@ CREATE TABLE IF NOT EXISTS `items` (
 
 -- Dumping data for table funtown.items: ~4 rows (approximately)
 /*!40000 ALTER TABLE `items` DISABLE KEYS */;
-REPLACE INTO `items` (`id`, `key`, `name`, `weight`, `max_stack`) VALUES
-	(1, 'id_card', 'ID Card', 0, 1),
-	(2, 'phone', 'Phone', 0, 1),
-	(3, 'cigarette', 'Cigarette', 1, 20),
-	(4, 'lighter', 'Lighter', 0, 1);
+REPLACE INTO `items` (`id`, `key`, `name`, `weight`, `max_stack`, `usable`) VALUES
+	(1, 'id_card', 'ID Card', 0, 1, b'1'),
+	(2, 'phone', 'Phone', 0, 1, b'1'),
+	(3, 'cigarette', 'Cigarette', 1, 20, b'1'),
+	(4, 'lighter', 'Lighter', 0, 1, b'0');
 /*!40000 ALTER TABLE `items` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
