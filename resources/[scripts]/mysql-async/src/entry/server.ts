@@ -7,9 +7,9 @@ import getConfig from '../vendor/ghmattimysql/packages/ghmattimysql/src/server/u
 
 const defaultCfg = {
   host: '127.0.0.1',
-  user: 'root',
-  password: '',
-  database: 'fivem',
+  user: 'fivemserver',
+  password: 'q_GJTgXbBn9fegke6!y!',
+  database: 'funtown',
   supportBigNumbers: true,
   multipleStatements: true,
 };

@@ -9,7 +9,6 @@
     "build-ui": "cd ui && react-scripts build",
     "build-all": "yarn build && yarn build-ui",
     "format": "prettier --write \"src/**/*.ts\"",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "watch": "webpack --mode development --watch true",
     "start": "cd ui && react-scripts start",
     "test": "cd ui && react-scripts test",
@@ -18,26 +17,23 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "@citizenfx/client": "^1.0.2792-1",
-    "@citizenfx/server": "^1.0.2792-1",
-    "@types/node": "^15.6.1",
-    "fivem-js": "^1.5.2"
+    "@citizenfx/client": "^2.0.5904-1",
+    "@citizenfx/server": "^2.0.5904-1",
+    "@types/node": "^18.7.23",
+    "caniuse-lite": "^1.0.30001481",
+    "fivem-js": "^1.5.2",
+    "react": "^16.8",
+    "react-dom": "^16.8",
+    "react-router-dom": "^6.4.1",
+    "webpack": "4.41.2",
+    "webpack-cli": "4"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^4.25.0",
-    "@typescript-eslint/parser": "^4.25.0",
-    "eslint": "^7.27.0",
-    "eslint-plugin-react": "^7.23.2",
     "prettier": "^2.0.5",
     "remove-files-webpack-plugin": "^1.4.3",
-    "typescript": "^4.3.2",
-    "webpack": "^5.38.1",
-    "webpack-cli": "^4.7.0",
-    "webpack-glob-entries-plugin": "^1.0.0",
-	"ts-loader": "^9.2.2",
-	"eslint-loader": "^4.0.2",
-	"react-scripts": "^4.0.3",
-	"react": "^17.0.2",
-	"sass": "^1.34.0"
+    "sass": "^1.34.0",
+    "ts-loader": "8",
+    "typescript": "^4.8.4",
+    "webpack-glob-entries-plugin": "^1.0.0"
   }
 }

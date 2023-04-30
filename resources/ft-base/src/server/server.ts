@@ -8,7 +8,7 @@ onNet(FTEvent.tpm, () => {
 });
 
 onNet(FTEvent.playerConnecting, () => {
-	insertOrUpdatePlayer(source);
+	insertOrUpdatePlayer(source.toString());
 });
 
 function insertOrUpdatePlayer (src: string) {
@@ -34,21 +34,21 @@ RegisterCommand("additem", (src: string, args: string[]) => {
 }, false);
 
 onNet(FTEvent.serverLoadCharacters, () => {
-	const src = source;
+	const src = source.toString();
 	ft.Characters.GetCharacters(ft.GetPlayerIdentifiers(src).discord).then((chars) => {
 		emitNet(FTEvent.loadedCharacters, src, chars);
 	});
 });
 
 onNet(FTEvent.serverCharSelected, (char: ICharacter) => {
-	const src = source;
+	const src = source.toString();
 	ft.Characters.CharSelected(src, char);
 	ft.Inventories.CreateInventoryIfNotExists(char);
 	console.log(`Client ${src} [${char.player_discord}] is now [${char.id}] ${char.first_name} ${char.last_name}.`);
 });
 
 onNet(FTEvent.serverNewChar, (data) => {
-	const src = source;
+	const src = source.toString();
 	const firstName = data.firstName || "First";
 	const lastName = data.lastName || "Last";
 	const dob = new Date(data.dob);
@@ -70,7 +70,7 @@ onNet(FTEvent.getItemDefinitions, () => {
 });
 
 onNet(FTEvent.getInventory, async () => {
-	const src = source;
+	const src = source.toString();
 	const curChar = ft.Characters.GetCurrentCharacter(src);
 	ft.Inventories.GetInventory(curChar).then((inv) => {
 		emitNet(FTEvent.inventoryData, src, inv);

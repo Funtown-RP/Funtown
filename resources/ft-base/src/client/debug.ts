@@ -59,6 +59,14 @@ RegisterCommand("nuiq", () => {
 	nui.Unfocus();
 }, false);
 
+RegisterCommand("nui", () => {
+	nui.Focus();
+}, false);
+
+RegisterCommand("charsel", () => {
+	nui.OpenApp(nui.App.charSelect)
+}, false);
+
 nui.onNui(NUIEvent.getItems, (): Array<IItem> => {
 	const allItems = AllItems();
 	if (allItems.length === 0) {
@@ -70,4 +78,12 @@ nui.onNui(NUIEvent.getItems, (): Array<IItem> => {
 
 RegisterCommand("inv", () => {
 	emitNet(FTEvent.getInventory);
+}, false);
+
+RegisterCommand("spawn", () => {
+	exports.spawnmanager.spawnPlayer();
+}, false);
+
+RegisterCommand("loadq", () => {
+	ShutdownLoadingScreen()
 }, false);

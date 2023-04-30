@@ -54,6 +54,7 @@ CREATE TABLE IF NOT EXISTS `items` (
   `name` varchar(255) NOT NULL,
   `weight` tinyint(4) NOT NULL DEFAULT 0,
   `max_stack` tinyint(4) NOT NULL DEFAULT 1,
+  `usable` bit(1) NOT NULL DEFAULT b'1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique item` (`key`),
   KEY `item key` (`key`)

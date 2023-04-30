@@ -16,7 +16,7 @@ const server = {
 		rules: [
 			{
 				test: /\.tsx?$/,
-				use: ["ts-loader", "eslint-loader"],
+				use: ["ts-loader"],
 				exclude: /node_modules/,
 			},
 		],
@@ -26,7 +26,7 @@ const server = {
 		new RemovePlugin({
 			before: {include: [path.resolve(buildPath, "server")],},
 			watch: {include: [path.resolve(buildPath, "server")],},
-		}),
+		})
 	],
 	optimization: {minimize: true,},
 	resolve: {extensions: [".tsx", ".ts", ".js"],},
@@ -44,7 +44,7 @@ const client = {
 		rules: [
 			{
 				test: /\.tsx?$/,
-				use: ["ts-loader", "eslint-loader"],
+				use: ["ts-loader"],
 				exclude: /node_modules/,
 			},
 		],
@@ -53,7 +53,7 @@ const client = {
 		new RemovePlugin({
 			before: {include: [path.resolve(buildPath, "client")],},
 			watch: {include: [path.resolve(buildPath, "client")],},
-		}),
+		})
 	],
 	optimization: {minimize: true,},
 	resolve: {extensions: [".tsx", ".ts", ".js"],},
